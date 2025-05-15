@@ -121,7 +121,7 @@ local function createAdaptiveWatermark()
     local screenSize = workspace.CurrentCamera.ViewportSize
 
     local watermarkGui = Instance.new("ScreenGui")
-    watermarkGui.Name = "AUG_Watermark"
+    watermarkGui.Name = "R_Watermark"
     watermarkGui.Parent = game.CoreGui
     watermarkGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     watermarkGui.ResetOnSpawn = false
@@ -179,13 +179,13 @@ local Heartbeat = game:GetService("RunService").Heartbeat
 local LastIteration, Start
 local FrameUpdateTable = { }
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入中"; Duration = 2; })wait("3")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入中"; Duration = 4; })wait("5")
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="阿巴阿巴"; Duration = 2; })wait("2")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="阿巴阿巴"; Duration = 4; })wait("4")
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "我喜欢挂王牌"; Text ="🙏钱晨拜三拜"; Duration = 2; })wait("2")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "我喜欢挂王牌"; Text ="🙏钱晨拜三拜"; Duration = 4; })wait("4")
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入成功"; Duration = 3; })
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入成功"; Duration = 5; })
 
 local function HeartbeatUpdate()
 	LastIteration = tick()
@@ -368,48 +368,6 @@ end)
 
 about:Button("spy",function()
 getgenv().Spy="汉化Spy" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/refs/heads/main/spy%E6%B1%89%E5%8C%96%20(1).txt"))()
-end)
-
-about:Button("功能1",function()
-MouseButton1Click:Connect(function()
-	local c = lp.Character
-	if c and c.Parent then
-		local hum = c:FindFirstChildOfClass("Humanoid")
-		if hum then
-		    hum:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
-			hum.Sit = true
-			notify("humanoid.Sit set to true")
-		else
-			notify("humanoid not found")
-		end
-	else
-		notify("character not found")
-	end
-end)
-end)
-
-about:Button("好像是甩飞",function()
-MouseButton1Click:Connect(function()
-	local c = lp.Character
-	if c then
-		local cpar = c.Parent
-		if cpar then
-			local hrp = gp(c, "HumanoidRootPart", "BasePart")
-			if hrp then
-				c.Parent = nil
-				hrp:Destroy()
-				c.Parent = cpar
-				notify("hrp removed")
-			else
-				notify("hrp not found")
-			end
-		else
-			notify("character not found")
-		end
-	else
-		notify("character not found")
-	end
-end)
 end)
 
 about:Button("位置仪",function()
