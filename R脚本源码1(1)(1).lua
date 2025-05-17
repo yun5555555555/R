@@ -1,120 +1,5 @@
- 删除原有的四个SendNotification部分，替换为以下内容--
-
--- 创建加载界面
-local LoadingGUI = Instance.new("ScreenGui")
-LoadingGUI.Name = "LoadingScreen"
-LoadingGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-LoadingGUI.Parent = game:GetService("CoreGui")
-
--- 全屏背景
-local Background = Instance.new("Frame")
-Background.Size = UDim2.new(1, 0, 1, 0)
-Background.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
-Background.BorderSizePixel = 0
-Background.Parent = LoadingGUI
-
--- 加载容器
-local Container = Instance.new("Frame")
-Container.Size = UDim2.new(0, 300, 0, 200)
-Container.Position = UDim2.new(0.5, 0, 0.5, 0)
-Container.AnchorPoint = Vector2.new(0.5, 0.5)
-Container.BackgroundTransparency = 1
-Container.Parent = Background
-
--- 动态加载图标
-local LoadingCircle = Instance.new("ImageLabel")
-LoadingCircle.Image = "rbxassetid://3570695787"  -- 默认旋转图标
-LoadingCircle.Size = UDim2.new(0, 80, 0, 80)
-LoadingCircle.Position = UDim2.new(0.5, 0, 0.3, 0)
-LoadingCircle.AnchorPoint = Vector2.new(0.5, 0.5)
-LoadingCircle.BackgroundTransparency = 1
-LoadingCircle.ImageColor3 = Color3.fromRGB(94, 234, 212)
-LoadingCircle.Parent = Container
-
--- 旋转动画
-local RotateTween = game:GetService("TweenService"):Create(
-    LoadingCircle,
-    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
-    {Rotation = 360}
-)
-RotateTween:Play()
-
--- 进度文本
-local ProgressText = Instance.new("TextLabel")
-ProgressText.Size = UDim2.new(1, 0, 0, 30)
-ProgressText.Position = UDim2.new(0, 0, 0.6, 0)
-ProgressText.BackgroundTransparency = 1
-ProgressText.Font = Enum.Font.GothamBold
-ProgressText.TextColor3 = Color3.fromRGB(255, 255, 255)
-ProgressText.TextSize = 18
-ProgressText.Text = "正在初始化羽脚本..."
-ProgressText.Parent = Container
-
--- 进度条
-local ProgressBar = Instance.new("Frame")
-ProgressBar.Size = UDim2.new(0.7, 0, 0, 4)
-ProgressBar.Position = UDim2.new(0.15, 0, 0.8, 0)
-ProgressBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-ProgressBar.BorderSizePixel = 0
-ProgressBar.Parent = Container
-
-local ProgressFill = Instance.new("Frame")
-ProgressFill.Size = UDim2.new(0, 0, 1, 0)
-ProgressFill.BackgroundColor3 = Color3.fromRGB(94, 234, 212)
-ProgressFill.BorderSizePixel = 0
-ProgressFill.Parent = ProgressBar
-
--- 分阶段加载动画
-local LoadSteps = {
-    {text = "正在加载核心模块...", progress = 25},
-    {text = "初始化用户界面...", progress = 50},
-    {text = "验证功能完整性...", progress = 75},
-    {text = "准备就绪！", progress = 100}
-}
-
-coroutine.wrap(function()
-    for _, step in pairs(LoadSteps) do
-        ProgressText.Text = step.text
-        game:GetService("TweenService"):Create(
-            ProgressFill,
-            TweenInfo.new(0.5, Enum.EasingStyle.Quad),
-            {Size = UDim2.new(step.progress/100, 0, 1, 0)}
-        ):Play()
-        
-        -- 添加粒子效果
-        if step.progress == 100 then
-            LoadingCircle.Image = "rbxassetid://3926305904"  -- 完成图标
-            LoadingCircle.ImageColor3 = Color3.fromRGB(94, 234, 212)
-            LoadingCircle.Rotation = 0
-            RotateTween:Pause()
-            
-            -- 完成特效
-            local particles = Instance.new("ParticleEmitter")
-            particles.Color = ColorSequence.new(Color3.fromRGB(94, 234, 212))
-            particles.Size = NumberSequence.new(0.5)
-            particles.Lifetime = NumberRange.new(1)
-            particles.Rate = 50
-            particles.Speed = NumberRange.new(50)
-            particles.Parent = LoadingCircle
-            wait(1)
-            particles:Destroy()
-        end
-        
-        wait(1)  -- 每个阶段持续时间
-    end
-    
-    -- 渐变退出
-    game:GetService("TweenService"):Create(
-        Background,
-        TweenInfo.new(0.5, Enum.EasingStyle.Quad),
-        {BackgroundTransparency = 1}
-    ):Play()
-    wait(0.5)
-    LoadingGUI:Destroy()
-end)()
-
 local function createAdaptiveWatermark()
-    if game.CoreGui:FindFirstChild("AUG_Watermark") then
+    if game.CoreGui:FindFirstChild("H_Watermark") then
         game.CoreGui.AUG_Watermark:Destroy()
     end
 
@@ -122,7 +7,7 @@ local function createAdaptiveWatermark()
     local screenSize = workspace.CurrentCamera.ViewportSize
 
     local watermarkGui = Instance.new("ScreenGui")
-    watermarkGui.Name = "R_Watermark"
+    watermarkGui.Name = "H_Watermark"
     watermarkGui.Parent = game.CoreGui
     watermarkGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     watermarkGui.ResetOnSpawn = false
@@ -130,7 +15,7 @@ local function createAdaptiveWatermark()
     local watermarkText = Instance.new("TextLabel")
     watermarkText.Name = "WatermarkText"
     watermarkText.Parent = watermarkGui
-    watermarkText.Text = "测试版R脚本" 
+    watermarkText.Text = "测试版H脚本" 
     watermarkText.TextColor3 = Color3.fromRGB(255, 255, 255)
     watermarkText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     watermarkText.TextStrokeTransparency = 0.3 
@@ -180,35 +65,43 @@ local Heartbeat = game:GetService("RunService").Heartbeat
 local LastIteration, Start
 local FrameUpdateTable = { }
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入中"; Duration = 4; })wait("5")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "H脚本"; Text ="载入中"; Duration = 2; })wait("3")
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="阿巴阿巴"; Duration = 4; })wait("4")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "H脚本"; Text ="加载完卡顿是正常"; Duration = 2; })wait("2")
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "我喜欢挂王牌"; Text ="🙏钱晨拜三拜"; Duration = 4; })wait("4")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "我喜欢挂王牌"; Text ="🙏钱晨拜三拜"; Duration = 2; })wait("3")
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入成功"; Duration = 5; })
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "H脚本"; Text ="载入成功"; Duration = 5; })
 
-local function HeartbeatUpdate()
-	LastIteration = tick()
-	for Index = #FrameUpdateTable, 1, -1 do
-		FrameUpdateTable[Index + 1] = (FrameUpdateTable[Index] >= LastIteration - 1) and FrameUpdateTable[Index] or nil
-	end
-	FrameUpdateTable[1] = LastIteration
-	local CurrentFPS = (tick() - Start >= 1 and #FrameUpdateTable) or (#FrameUpdateTable / (tick() - Start))
-	CurrentFPS = CurrentFPS - CurrentFPS % 1
-	FpsLabel.Text = ("现在时间:"..os.date("%H").."时"..os.date("%M").."分"..os.date("%S"))
+    local formattedTime = string.format("%02d:%02d:%02d", os.date("%H"), os.date("%M"), os.date("%S"))
+    LBL.Text = ("哈哈时间" .. formattedTime)
+
+    -- 彩虹颜色周期
+    local rainbowColors = {
+        Color3.new(1, 0, 0), -- 红色
+        Color3.new(1, 1, 0), -- 黄色
+        Color3.new(0, 1, 0), -- 绿色
+        Color3.new(0, 0, 1), -- 蓝色
+        Color3.new(1, 0, 1), -- 紫色
+        Color3.new(1, 1, 1), -- 白色
+        Color3.new(0, 0, 0), -- 黑色
+    }
+    local rainbowIndex = math.floor((LastIteration % 6) + 1)
+    LBL.TextColor3 = rainbowColors[rainbowIndex]
 end
+
 Start = tick()
+
 Heartbeat:Connect(HeartbeatUpdate)
 
-local ui = loadstring(game:HttpGet("https://raw.githubusercontent.com/JY6812/UI/refs/heads/main/81.lua"))()
+local xynbui = loadstring(game:HttpGet("https://raw.githubusercontent.com/JY6812/UI/refs/heads/main/81.lua"))()
 local win = xynbui:new("R脚本")
 --
 local UITab1 = win:Tab("信息",'16060333448')
 
 local about = UITab1:section("作者信息",false)
 
-about:Label("由AUG脚本正式改名叫R脚本")
+about:Label("由AUG脚本正式改名叫H脚本")
 about:Label("洛天依制作")
 about:Label("每星期天星期六一定更新")
 about:Label("此脚本是测试的有bug告诉洛天依")
@@ -218,7 +111,7 @@ local UITab3 = win:Tab("脚本版本",'16060333448')
 
 local about = UITab3:section("脚本版本",true)
 
-about:Label("您的脚本为V1")
+about:Label("您的H脚本版本：测试V1")
 
 local UITab1 = win:Tab("作者的感谢",'16060333448')
 
@@ -230,7 +123,7 @@ about:Label("SU")
 
 local about = UITab1:section("你的信息",false)
 
-about:Label("你的注入器:"..identifyexecutor())
+about:Label("你的注入器:"..identifyexecutor());
 about:Label("你的账号年龄:"..player.AccountAge.."天")
 about:Label("你的注入器:"..identifyexecutor())
 about:Label("你的用户名:"..game.Players.LocalPlayer.Character.Name)
@@ -249,7 +142,7 @@ about:Toggle("脚本框架变小一点", "", false, function(state)
         game:GetService("CoreGui")["frosty"]:Destroy()
     end)
     
-about:Label("R脚本")
+about:Label("H脚本")
 about:Label("作者QQ：为什么要告诉你")
 about:Button("点击复作者QQ群",function()
 setclipboard("149437754")
@@ -310,18 +203,6 @@ end)
 local UITab3 = win:Tab("通用",'16060333448')
 
 local about = UITab3:section("通用",true)
-
-about:Toggle("查看玩家", 'Toggleflag', false, function(state)
-    if state then
-        game:GetService('Workspace').CurrentCamera.CameraSubject =
-            game:GetService('Players'):FindFirstChild(playernamedied).Character.Humanoid
-            Notify("大司马", "已开启", "rbxassetid://", 5)
-    else
-        Notify("大司马", "已关闭", "rbxassetid://", 5)
-        local lp = game.Players.LocalPlayer
-        game:GetService('Workspace').CurrentCamera.CameraSubject = lp.Character.Humanoid
-    end
-end)
 
 about:Slider("步行速度!", "WalkSpeed", game.Players.LocalPlayer.Character.Humanoid.WalkSpeed, 16, 1000, false, function(Speed)
   spawn(function() while task.wait() do game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Speed end end)
@@ -4187,7 +4068,7 @@ about:Toggle("防死亡屏障","Toggle", false, function(Value)
     end
     end)
     
-    about:Toggle("反巴西","Toggle", false, function(Value)
+    about:Toggle("防巴西", "ToggleInfo", false, function(value)
     if Value == true then
     for i,v in pairs(game.Workspace.Lobby.brazil:GetChildren()) do
                             v.CanTouch = false
