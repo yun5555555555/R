@@ -1,7 +1,7 @@
 local function createAdaptiveWatermark()
     if game.CoreGui:FindFirstChild("H_Watermark") then
-        game.CoreGui.AUG_Watermark:Destroy()
-    end
+    game.CoreGui.H_Watermark:Destroy()
+end
 
 
     local screenSize = workspace.CurrentCamera.ViewportSize
