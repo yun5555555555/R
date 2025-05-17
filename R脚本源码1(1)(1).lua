@@ -1,4 +1,4 @@
--- 删除原有的四个SendNotification部分，替换为以下内容--
+ 删除原有的四个SendNotification部分，替换为以下内容--
 
 -- 创建加载界面
 local LoadingGUI = Instance.new("ScreenGui")
@@ -112,6 +112,7 @@ coroutine.wrap(function()
     wait(0.5)
     LoadingGUI:Destroy()
 end)()
+
 local function createAdaptiveWatermark()
     if game.CoreGui:FindFirstChild("AUG_Watermark") then
         game.CoreGui.AUG_Watermark:Destroy()
@@ -187,24 +188,20 @@ game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "我喜欢挂
 
 game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入成功"; Duration = 5; })
 
-    local formattedTime = string.format("%02d:%02d:%02d", os.date("%H"), os.date("%M"), os.date("%S"))
-    LBL.Text = ("依依时间" .. formattedTime)
-
-    -- 彩虹颜色周期
-    local rainbowColors = {
-        Color3.new(1, 0, 0), -- 红色
-        Color3.new(1, 1, 0), -- 黄色
-        Color3.new(0, 1, 0), -- 绿色
-        Color3.new(0, 0, 1), -- 蓝色
-        Color3.new(1, 0, 1), -- 紫色
-        Color3.new(1, 1, 1), -- 白色
-        Color3.new(0, 0, 0), -- 黑色
-    }
-    local rainbowIndex = math.floor((LastIteration % 6) + 1)
-    LBL.TextColor3 = rainbowColors[rainbowIndex]
+local function HeartbeatUpdate()
+	LastIteration = tick()
+	for Index = #FrameUpdateTable, 1, -1 do
+		FrameUpdateTable[Index + 1] = (FrameUpdateTable[Index] >= LastIteration - 1) and FrameUpdateTable[Index] or nil
+	end
+	FrameUpdateTable[1] = LastIteration
+	local CurrentFPS = (tick() - Start >= 1 and #FrameUpdateTable) or (#FrameUpdateTable / (tick() - Start))
+	CurrentFPS = CurrentFPS - CurrentFPS % 1
+	FpsLabel.Text = ("现在时间:"..os.date("%H").."时"..os.date("%M").."分"..os.date("%S"))
 end
+Start = tick()
+Heartbeat:Connect(HeartbeatUpdate)
 
-local xynbui = loadstring(game:HttpGet("https://raw.githubusercontent.com/JY6812/UI/refs/heads/main/81.lua"))()
+local ui = loadstring(game:HttpGet("https://raw.githubusercontent.com/JY6812/UI/refs/heads/main/81.lua"))()
 local win = xynbui:new("R脚本")
 --
 local UITab1 = win:Tab("信息",'16060333448')
@@ -3871,56 +3868,442 @@ SGV_Tab:Button("手持近战",function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/CX5200/Sword-Guest/main/killQWQ'))()
 end)
 
-local UITab31 = win:Tab("『Doors』",'16060333448')
+local UITab75 = win:Tab("Papers Pls",'7734068321')
 
-local about = UITab31:section("提示",false)
+local about = UITab75:section("『Papers Pls』",true)
 
-about:Label("请进入服务器后再执行脚本")
+about:Button("Papers Pls无限金钱",function()
+local Players = game:GetService("Players")
+local workspace = game:GetService("Workspace")
+local vehicleShop = game:GetService("Workspace").Buildings.VehicleShop
+local humanoidRootPart = Players.LocalPlayer.Character.HumanoidRootPart
 
-local UITab32 = win:Tab("『河北唐县』",'16060333448')
 
-local about = UITab32:section("提示",false)
+humanoidRootPart.CFrame = vehicleShop.MeshPart.CFrame
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.1)
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.1)
+humanoidRootPart.CFrame = vehicleShop.MeshPart.CFrame
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.1)
+humanoidRootPart.CFrame = vehicleShop.MeshPart.CFrame
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.1)
 
-about:Label("请进入服务器后再执行脚本")
+--poorly coded but what ever took me 2 mins inf money!! SOURCE
+humanoidRootPart.CFrame = CFrame.new(325.4398498535156, 2.3936524391174316, 84.23402404785156)
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.5)
 
-local UITab33 = win:Tab("『力量传奇』",'16060333448')
 
-local about = UITab33:section("提示",false)
 
-about:Label("请进入服务器后再执行脚本")
+while true do
+for _,v in ipairs(vehicleShop:GetChildren()) do
+    if v.Name 
+    == "CarMake" or v.Name == "Carmake2" then
+        for _, sigh in ipairs(v:GetDescendants()) do
+            if sigh:IsA("ProximityPrompt") then
+                    fireproximityprompt(sigh)
+                    sigh.RequiresLineOfSight = false
+            end
+        end
+    end
+end
+task.wait()
+end
+end)
 
-local UITab34 = win:Tab("『格蕾丝』",'16060333448')
+local UITab39 = win:Tab("『巴掌模拟器』",'7734068321')
 
-local about = UITab34:section("提示",false)
+local about = UITab39:section("『巴掌模拟器』",true)
 
-about:Label("请进入服务器后再执行脚本")
+about:Toggle("无CD","Toggle" ,false, function(Value)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local tool = character:FindFirstChildOfClass("Tool") or player.Backpack:FindFirstChildOfClass("Tool")
+    
+    bazhangmnq = Value
+    
+    while bazhangmnq do
+    local localscript = tool:FindFirstChildOfClass("LocalScript")
+    local localscriptclone = localscript:Clone()
+    localscriptclone = localscript:Clone()
+    localscriptclone:Clone()
+    localscript:Destroy()
+    localscriptclone.Parent = tool
+    wait(0.1)
+    end
+    end)
+    
+    about:Button("获取计数器手套", function()
+    fireclickdetector(game.Workspace.CounterLever.ClickDetector)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,100,0)
+    wait(0.2)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+    wait(121)
+    for i,v in pairs(workspace.Maze:GetDescendants()) do
+    if v:IsA("ClickDetector") then
+    fireclickdetector(v)
+    end
+    end
+    end)
+    
+    about:Toggle("地牢亮度","Toggle" ,false, function(Value)
+     Light = Value
+        if not Light then
+            game.Lighting.Ambient = Color3.new(0, 0, 0)
+        end
+    end)
+    
+    about:Dropdown("传送","Dropdown",{"安全区","竞技场","埃及岛","果实岛","盘子","锦标赛","默认竞技场"},function(Value)
+    if Value == "安全区" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Spot.CFrame * CFrame.new(0,40,0)
+    elseif Value == "竞技场" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.workspace.Origo.CFrame * CFrame.new(0,-5,0)
+    elseif Value == "埃及岛" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(215, -15.5, 0.5)
+    elseif Value == "果实岛" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.workspace.Arena.island5.Union.CFrame * CFrame.new(0,3.25,0)
+    elseif Value == "盘子" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Arena.Plate.CFrame * CFrame.new(0,2,0)
+    elseif Value == "锦标赛" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Battlearena.Arena.CFrame * CFrame.new(0,10,0)
+    elseif Value == "默认竞技场" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(120,360,-3)
+    end
+    end)
+    
+    about:Toggle("复古技能","Toggle" ,false, function(Value)
+    RetroSpam = Value
+    while RetroSpam do
+    game:GetService("ReplicatedStorage").RetroAbility:FireServer(RetroAbility)
+    task.wait()
+    end
+    end)
+    
+    about:Dropdown("复古技能选择","Dropdown",{"Rocket Launcher","Ban Hammer","Bomb"}, function(Value)
+    RetroAbility = Value
+    end)
+    
+    about:Toggle("自动捡糖果","Toggle",false, function(Value)
+    CandyCornFarm = Value
+    while CandyCornFarm do
+    for i, v in pairs(workspace.CandyCorns:GetChildren()) do
+                    if v:FindFirstChildWhichIsA("TouchTransmitter") then
+    v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                    end
+                end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("获取炼金术师材料","Toggle", false, function(Value)
+    AlchemistIngredients = Value
+    if game.Players.LocalPlayer.leaderstats.Glove.Value == "Alchemist" then
+    while AlchemistIngredients do
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Mushroom")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Glowing Mushroom")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Fire Flower")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Winter Rose")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Dark Root")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Dire Flower")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Autumn Sprout")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Elder Wood")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Hazel Lily")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Wild Vine")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Jade Stone")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Lamp Grass")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Plane Flower")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Blood Rose")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Red Crystal")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Blue Crystal")
+    task.wait()
+    end
+    end
+    end)
+    
+    about:Toggle("自动加入竞技场","Toggle", false, function(Value)
+    AutoEnterArena = Value
+    while AutoEnterArena do
+    if game.Players.LocalPlayer.Character:FindFirstChild("entered") == nil and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), workspace.Lobby.Teleport1, 0)
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), workspace.Lobby.Teleport1, 1)
+        end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动光波球","Toggle", false, function(Value)
+    if Person == nil then
+    Person = game.Players.LocalPlayer.Name
+    end
+    _G.RojoSpam = Value
+    while _G.RojoSpam do
+    game:GetService("ReplicatedStorage"):WaitForChild("RojoAbility"):FireServer("Release", {game.Players[Person].Character.HumanoidRootPart.CFrame})
+    task.wait()
+    end
+    end)
+    
+    about:Button("Rojo技能", function(Value)
+    _G.RojoSpam = Value
+    game:GetService("ReplicatedStorage"):WaitForChild("RojoAbility"):FireServer("Charge")
+    wait(6)
+    game:GetService("ReplicatedStorage"):WaitForChild("RojoAbility"):FireServer("Release", {game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame})
+    task.wait()
+    end)
+    
+    about:Toggle("音符技能","Toggle", false, function(Value)
+    _G.RhythmSpam = Value
+    while _G.RhythmSpam do
+    game:GetService("ReplicatedStorage").rhythmevent:FireServer("AoeExplosion",0)
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("Null技能","Toggle", false, function(Value)
+    NullSpam = Value
+    while NullSpam do
+    game:GetService("ReplicatedStorage").NullAbility:FireServer()
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动拾取黄金果实","Toggle", false, function(Value)
+    SlappleFarm = Value
+    while SlappleFarm do
+    for i, v in ipairs(workspace.Arena.island5.Slapples:GetDescendants()) do
+                    if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("entered") and v.Name == "Glove" and v:FindFirstChildWhichIsA("TouchTransmitter") then
+                        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+                    end
+                end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动捡飞行宝珠","Toggle", false, function(Value)
+    Jetfarm = Value
+    while Jetfarm do
+    for i,v in pairs(game.Workspace:GetChildren()) do
+                        if v.Name == "JetOrb" and v:FindFirstChild("TouchInterest") then
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 0)
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 1)
+                        end
+                    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动捡相位球","Toggle", false, function(Value)
+    Phasefarm = Value
+    while Phasefarm do
+    for i,v in pairs(game.Workspace:GetChildren()) do
+                        if v.Name == "PhaseOrb" and v:FindFirstChild("TouchInterest") then
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 0)
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 1)
+                        end
+                    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动刷bob","Toggle", false, function(Value)
+    ReplicaFarm = Value
+    while ReplicaFarm do
+    for i, v in pairs(workspace:GetChildren()) do
+                    if v.Name:match(game.Players.LocalPlayer.Name) and v:FindFirstChild("HumanoidRootPart") then
+    game.ReplicatedStorage.b:FireServer(v:WaitForChild("HumanoidRootPart"))
+                    end
+                end
+    task.wait()
+    game:GetService("ReplicatedStorage").Duplicate:FireServer()
+    task.wait(7)
+    end
+    end)
+    
+    about:Toggle("无限反转","Toggle", false, function(Value)
+    _G.InfReverse = Value
+    while _G.InfReverse do
+    game:GetService("ReplicatedStorage").ReverseAbility:FireServer()
+    wait(6)
+    end
+    end)
+    
+    about:Toggle("彩虹角色(装备黄金手套)","Toggle", false, function(Value)
+    _G.Rainbow = Value
+    while _G.Rainbow do
+    for i = 0,1,0.001*25 do
+    game:GetService("ReplicatedStorage").Goldify:FireServer(false, BrickColor.new(Color3.fromHSV(i,1,1)))
+    task.wait()
+    end
+    end
+    end)
+    
+    about:Toggle("防击飞","Toggle", false, function(Value)
+    AntiRagdoll = Value
+    if AntiRagdoll then
+    game.Players.LocalPlayer.Character.Humanoid.Health = 0
+    game.Players.LocalPlayer.CharacterAdded:Connect(function()
+    game.Players.LocalPlayer.Character:WaitForChild("Ragdolled").Changed:Connect(function()
+    if game.Players.LocalPlayer.Character:WaitForChild("Ragdolled").Value == true and AntiRagdoll then
+    repeat task.wait() game.Players.LocalPlayer.Character.Torso.Anchored = true
+    until game.Players.LocalPlayer.Character:WaitForChild("Ragdolled").Value == false
+    game.Players.LocalPlayer.Character.Torso.Anchored = false
+    end
+    end)
+    end)
+    end
+    end)
+    
+    about:Toggle("反虚空(锦标赛也有效果)","Toggle", false, function(Value)
+    game.Workspace.dedBarrier.CanCollide = Value
+    game.Workspace.TAntiVoid.CanCollide = Value
+    end)
 
-local UITab35 = win:Tab("『伐木大亨2』",'16060333448')
+about:Toggle("防死亡屏障","Toggle", false, function(Value)
+    if Value == true then
+    for i,v in pairs(game.Workspace.DEATHBARRIER:GetChildren()) do
+                        if v.ClassName == "Part" and v.Name == "BLOCK" then
+                            v.CanTouch = false
+                        end
+                    end
+    workspace.DEATHBARRIER.CanTouch = false
+    workspace.DEATHBARRIER2.CanTouch = false
+    workspace.dedBarrier.CanTouch = false
+    workspace.ArenaBarrier.CanTouch = false
+    workspace.AntiDefaultArena.CanTouch = false
+    else
+    for i,v in pairs(game.Workspace.DEATHBARRIER:GetChildren()) do
+                        if v.ClassName == "Part" and v.Name == "BLOCK" then
+                            v.CanTouch = true
+                        end
+                    end
+    workspace.DEATHBARRIER.CanTouch = true
+    workspace.DEATHBARRIER2.CanTouch = true
+    workspace.dedBarrier.CanTouch = true
+    workspace.ArenaBarrier.CanTouch = true
+    workspace.AntiDefaultArena.CanTouch = true
+    end
+    end)
+    
+    about:Toggle("反巴西","Toggle", false, function(Value)
+    if Value == true then
+    for i,v in pairs(game.Workspace.Lobby.brazil:GetChildren()) do
+                            v.CanTouch = false
+                    end
+    else
+    for i,v in pairs(game.Workspace.Lobby.brazil:GetChildren()) do
+                            v.CanTouch = true
+                    end
+    end
+    end)
+    
+    about:Toggle("反死亡方块","Toggle", false, function(Value)
+    if Value == true then
+            workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = false
+            else
+                    workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = true
+            end
+    end)
+    
+    about:Toggle("反上帝技能","Toggle", false, function(Value)
+    AntiTimestop = Value
+    while AntiTimestop do
+                    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                        if v.ClassName == "Part" then
+                            v.Anchored = false
+                        end
+                    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("反鱿鱼","Toggle", false, function(Value)
+    AntiSquid = Value
+    if AntiSquid == false then
+            game.Players.LocalPlayer.PlayerGui.SquidInk.Enabled = true
+            end
+    while AntiSquid do
+    if game.Players.LocalPlayer.PlayerGui:FindFirstChild("SquidInk") then
+            game.Players.LocalPlayer.PlayerGui.SquidInk.Enabled = false
+    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("反神圣杰克","Toggle", false, function(Value)
+    game.Players.LocalPlayer.PlayerScripts.HallowJackAbilities.Disabled = Value
+    end)
+    
+    about:Toggle("反传送带","Toggle", false, function(Value)
+    game.Players.LocalPlayer.PlayerScripts.ConveyorVictimized.Disabled = Value
+    end)
+    
+    about:Toggle("反板砖","Toggle", false, function(Value)
+    AntiBrick = Value
+    while AntiBrick do
+    for i,v in pairs(game.Workspace:GetChildren()) do
+                        if v.Name == "Union" then
+                            v.CanTouch = false
+                        end
+                    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("反Null","Toggle", false, function(Value)
+    AntiNull = Value
+    while AntiNull do
+    for i,v in pairs(game.Workspace:GetChildren()) do
+                        if v.Name == "Imp" and v:FindFirstChild("Body") then
+    shared.gloveHits[game.Players.LocalPlayer.leaderstats.Glove.Value]:FireServer(v.Body,true)
+    end
+    end
+    task.wait()
+    end
+    end)
+    
+about:Button("自动刷巴掌",function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/ionlyusegithubformcmods/1-Line-Scripts/main/Slap%20Farm'))()
+end)
 
-local about = UITab35:section("提示",false)
+about:Button("巴掌模拟器1",function()
+loadstring(game:HttpGet("https://lkhub.net/s/loader.lua"))()
+end)
 
-about:Label("请进入服务器后再执行脚本")
+about:Button("巴掌模拟器2",function()
+loadstring(game:HttpGet(("https://raw.githubusercontent.com/ionlyusegithubformcmods/1-Line-Scripts/main/Slap%20Battles")))()
+end)
 
-local UITab36 = win:Tab("『俄亥俄州』",'16060333448')
+about:Button("巴掌模拟器3",function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dizyhvh/slap_battles_gui/main/0.lua"))()
+end)
 
-local about = UITab36:section("提示",false)
+local UITab11 = win:Tab("『感染性微笑』",'7734068321')
 
-about:Label("请进入服务器后再执行脚本")
+local about = UITab11:section("『感染性微笑』",true)
 
-local UITab37 = win:Tab("『狗熊岭』",'16060333448')
+about:Button("感染性微笑1",function()
+loadstring(game:HttpGet("https://pastebin.com/raw/WG1BMS72",true))()
+end)
 
-local about = UITab37:section("提示",false)
+about:Button("感染性微笑2",function()
+loadstring(game:HttpGet(("https://pastebin.com/raw/mT10xnt7"), true))()
+end)
 
-about:Label("请进入服务器后再执行脚本")
+local UITab23 = win:Tab("『餐厅大亨』",'7734068321')
 
-local UITab38 = win:Tab("『颜色或者死亡』",'16060333448')
+local about = UITab23:section("『餐厅大亨』",true)
 
-local about = UITab38:section("提示",false)
+about:Button("餐厅大亨1",function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/toosiwhip/snake-hub/main/restaurant-tycoon-2.lua"))()
+end)
 
-about:Label("请进入服务器后再执行脚本")
+about:Button("餐厅大亨2",function()
+loadstring(game:HttpGet("https://pastefy.app/Ppqt0Gib/raw"))()
+end)
 
-local UITab39 = win:Tab("『火箭发射模拟器』",'16060333448')
-
-local about = UITab39:section("提示",false)
-
-about:Label("请进入服务器后再执行脚本")
+about:Button("无限金钱",function()
+loadstring(game:HttpGet("https://shz.al/~zkzkzisKAKAKK"))()
+end)
