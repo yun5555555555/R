@@ -1,127 +1,13 @@
--- 删除原有的四个SendNotification部分，替换为以下内容--
-
--- 创建加载界面
-local LoadingGUI = Instance.new("ScreenGui")
-LoadingGUI.Name = "LoadingScreen"
-LoadingGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-LoadingGUI.Parent = game:GetService("CoreGui")
-
--- 全屏背景
-local Background = Instance.new("Frame")
-Background.Size = UDim2.new(1, 0, 1, 0)
-Background.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
-Background.BorderSizePixel = 0
-Background.Parent = LoadingGUI
-
--- 加载容器
-local Container = Instance.new("Frame")
-Container.Size = UDim2.new(0, 300, 0, 200)
-Container.Position = UDim2.new(0.5, 0, 0.5, 0)
-Container.AnchorPoint = Vector2.new(0.5, 0.5)
-Container.BackgroundTransparency = 1
-Container.Parent = Background
-
--- 动态加载图标
-local LoadingCircle = Instance.new("ImageLabel")
-LoadingCircle.Image = "rbxassetid://3570695787"  -- 默认旋转图标
-LoadingCircle.Size = UDim2.new(0, 80, 0, 80)
-LoadingCircle.Position = UDim2.new(0.5, 0, 0.3, 0)
-LoadingCircle.AnchorPoint = Vector2.new(0.5, 0.5)
-LoadingCircle.BackgroundTransparency = 1
-LoadingCircle.ImageColor3 = Color3.fromRGB(94, 234, 212)
-LoadingCircle.Parent = Container
-
--- 旋转动画
-local RotateTween = game:GetService("TweenService"):Create(
-    LoadingCircle,
-    TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
-    {Rotation = 360}
-)
-RotateTween:Play()
-
--- 进度文本
-local ProgressText = Instance.new("TextLabel")
-ProgressText.Size = UDim2.new(1, 0, 0, 30)
-ProgressText.Position = UDim2.new(0, 0, 0.6, 0)
-ProgressText.BackgroundTransparency = 1
-ProgressText.Font = Enum.Font.GothamBold
-ProgressText.TextColor3 = Color3.fromRGB(255, 255, 255)
-ProgressText.TextSize = 18
-ProgressText.Text = "正在初始化羽脚本..."
-ProgressText.Parent = Container
-
--- 进度条
-local ProgressBar = Instance.new("Frame")
-ProgressBar.Size = UDim2.new(0.7, 0, 0, 4)
-ProgressBar.Position = UDim2.new(0.15, 0, 0.8, 0)
-ProgressBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-ProgressBar.BorderSizePixel = 0
-ProgressBar.Parent = Container
-
-local ProgressFill = Instance.new("Frame")
-ProgressFill.Size = UDim2.new(0, 0, 1, 0)
-ProgressFill.BackgroundColor3 = Color3.fromRGB(94, 234, 212)
-ProgressFill.BorderSizePixel = 0
-ProgressFill.Parent = ProgressBar
-
--- 分阶段加载动画
-local LoadSteps = {
-    {text = "正在加载核心模块...", progress = 25},
-    {text = "初始化用户界面...", progress = 50},
-    {text = "验证功能完整性...", progress = 75},
-    {text = "准备就绪！", progress = 100}
-}
-
-coroutine.wrap(function()
-    for _, step in pairs(LoadSteps) do
-        ProgressText.Text = step.text
-        game:GetService("TweenService"):Create(
-            ProgressFill,
-            TweenInfo.new(0.5, Enum.EasingStyle.Quad),
-            {Size = UDim2.new(step.progress/100, 0, 1, 0)}
-        ):Play()
-        
-        -- 添加粒子效果
-        if step.progress == 100 then
-            LoadingCircle.Image = "rbxassetid://3926305904"  -- 完成图标
-            LoadingCircle.ImageColor3 = Color3.fromRGB(94, 234, 212)
-            LoadingCircle.Rotation = 0
-            RotateTween:Pause()
-            
-            -- 完成特效
-            local particles = Instance.new("ParticleEmitter")
-            particles.Color = ColorSequence.new(Color3.fromRGB(94, 234, 212))
-            particles.Size = NumberSequence.new(0.5)
-            particles.Lifetime = NumberRange.new(1)
-            particles.Rate = 50
-            particles.Speed = NumberRange.new(50)
-            particles.Parent = LoadingCircle
-            wait(1)
-            particles:Destroy()
-        end
-        
-        wait(1)  -- 每个阶段持续时间
-    end
-    
-    -- 渐变退出
-    game:GetService("TweenService"):Create(
-        Background,
-        TweenInfo.new(0.5, Enum.EasingStyle.Quad),
-        {BackgroundTransparency = 1}
-    ):Play()
-    wait(0.5)
-    LoadingGUI:Destroy()
-end)()
 local function createAdaptiveWatermark()
-    if game.CoreGui:FindFirstChild("AUG_Watermark") then
-        game.CoreGui.AUG_Watermark:Destroy()
-    end
+    if game.CoreGui:FindFirstChild("H_Watermark") then
+    game.CoreGui.H_Watermark:Destroy()
+end
 
 
     local screenSize = workspace.CurrentCamera.ViewportSize
 
     local watermarkGui = Instance.new("ScreenGui")
-    watermarkGui.Name = "R_Watermark"
+    watermarkGui.Name = "H_Watermark"
     watermarkGui.Parent = game.CoreGui
     watermarkGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     watermarkGui.ResetOnSpawn = false
@@ -129,7 +15,7 @@ local function createAdaptiveWatermark()
     local watermarkText = Instance.new("TextLabel")
     watermarkText.Name = "WatermarkText"
     watermarkText.Parent = watermarkGui
-    watermarkText.Text = "测试版R脚本" 
+    watermarkText.Text = "测试版H脚本" 
     watermarkText.TextColor3 = Color3.fromRGB(255, 255, 255)
     watermarkText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     watermarkText.TextStrokeTransparency = 0.3 
@@ -179,35 +65,43 @@ local Heartbeat = game:GetService("RunService").Heartbeat
 local LastIteration, Start
 local FrameUpdateTable = { }
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入中"; Duration = 4; })wait("5")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "H脚本"; Text ="载入中"; Duration = 2; })wait(3)
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="阿巴阿巴"; Duration = 4; })wait("4")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "H脚本"; Text ="加载完卡顿是正常"; Duration = 2; })wait(2)
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "我喜欢挂王牌"; Text ="🙏钱晨拜三拜"; Duration = 4; })wait("4")
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "我喜欢挂王牌"; Text ="🙏钱晨拜三拜"; Duration = 2; })wait(3)
 
-game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "R脚本"; Text ="载入成功"; Duration = 5; })
+game:GetService("StarterGui"):SetCore("SendNotification",{ Title = "H脚本"; Text ="载入成功"; Duration = 5; })
 
-local function HeartbeatUpdate()
-	LastIteration = tick()
-	for Index = #FrameUpdateTable, 1, -1 do
-		FrameUpdateTable[Index + 1] = (FrameUpdateTable[Index] >= LastIteration - 1) and FrameUpdateTable[Index] or nil
-	end
-	FrameUpdateTable[1] = LastIteration
-	local CurrentFPS = (tick() - Start >= 1 and #FrameUpdateTable) or (#FrameUpdateTable / (tick() - Start))
-	CurrentFPS = CurrentFPS - CurrentFPS % 1
-	FpsLabel.Text = ("现在时间:"..os.date("%H").."时"..os.date("%M").."分"..os.date("%S"))
+    local formattedTime = string.format("%02d:%02d:%02d", os.date("%H"), os.date("%M"), os.date("%S"))
+    LBL.Text = ("哈哈时间" .. formattedTime)
+
+    -- 彩虹颜色周期
+    local rainbowColors = {
+        Color3.new(1, 0, 0), -- 红色
+        Color3.new(1, 1, 0), -- 黄色
+        Color3.new(0, 1, 0), -- 绿色
+        Color3.new(0, 0, 1), -- 蓝色
+        Color3.new(1, 0, 1), -- 紫色
+        Color3.new(1, 1, 1), -- 白色
+        Color3.new(0, 0, 0), -- 黑色
+    }
+    local rainbowIndex = math.floor((LastIteration % 6) + 1)
+    LBL.TextColor3 = rainbowColors[rainbowIndex]
 end
+
 Start = tick()
+
 Heartbeat:Connect(HeartbeatUpdate)
 
-local ui = loadstring(game:HttpGet("https://raw.githubusercontent.com/renlua/UI-lib/refs/heads/main/AL_V3"))()
+local xynbui = loadstring(game:HttpGet("https://raw.githubusercontent.com/JY6812/UI/refs/heads/main/81.lua"))()
 local win = xynbui:new("R脚本")
 --
 local UITab1 = win:Tab("信息",'16060333448')
 
 local about = UITab1:section("作者信息",false)
 
-about:Label("由AUG脚本正式改名叫R脚本")
+about:Label("由AUG脚本正式改名叫H脚本")
 about:Label("洛天依制作")
 about:Label("每星期天星期六一定更新")
 about:Label("此脚本是测试的有bug告诉洛天依")
@@ -217,7 +111,7 @@ local UITab3 = win:Tab("脚本版本",'16060333448')
 
 local about = UITab3:section("脚本版本",true)
 
-about:Label("您的脚本为V1")
+about:Label("您的H脚本版本：测试V1")
 
 local UITab1 = win:Tab("作者的感谢",'16060333448')
 
@@ -229,7 +123,7 @@ about:Label("SU")
 
 local about = UITab1:section("你的信息",false)
 
-about:Label("你的注入器:"..identifyexecutor())
+about:Label("你的注入器:"..identifyexecutor());
 about:Label("你的账号年龄:"..player.AccountAge.."天")
 about:Label("你的注入器:"..identifyexecutor())
 about:Label("你的用户名:"..game.Players.LocalPlayer.Character.Name)
@@ -248,7 +142,7 @@ about:Toggle("脚本框架变小一点", "", false, function(state)
         game:GetService("CoreGui")["frosty"]:Destroy()
     end)
     
-about:Label("R脚本")
+about:Label("H脚本")
 about:Label("作者QQ：为什么要告诉你")
 about:Button("点击复作者QQ群",function()
 setclipboard("149437754")
@@ -309,18 +203,6 @@ end)
 local UITab3 = win:Tab("通用",'16060333448')
 
 local about = UITab3:section("通用",true)
-
-about:Toggle("查看玩家", 'Toggleflag', false, function(state)
-    if state then
-        game:GetService('Workspace').CurrentCamera.CameraSubject =
-            game:GetService('Players'):FindFirstChild(playernamedied).Character.Humanoid
-            Notify("大司马", "已开启", "rbxassetid://", 5)
-    else
-        Notify("大司马", "已关闭", "rbxassetid://", 5)
-        local lp = game.Players.LocalPlayer
-        game:GetService('Workspace').CurrentCamera.CameraSubject = lp.Character.Humanoid
-    end
-end)
 
 about:Slider("步行速度!", "WalkSpeed", game.Players.LocalPlayer.Character.Humanoid.WalkSpeed, 16, 1000, false, function(Speed)
   spawn(function() while task.wait() do game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Speed end end)
@@ -1024,6 +906,52 @@ velocity.Parent = humRoot
 velocity.Name = "Spinbot"
     end)
 
+local UITab3 = win:Tab("修改玩家",'16060333448')
+
+local about = UITab3:section("修改玩家",true)
+
+about:Slider('修改速度', 'WalkspeedSlider', 16, 16, 99999,false, function(Value)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+end)
+
+    about:Slider('修改跳跃', 'JumpPowerSlider', 50, 50, 99999,false, function(Value)
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+end)
+
+    about:Slider('修改重力', 'GravitySlider', 198, 198, 99999,false,function(Value)
+    game.Workspace.Gravity = Value
+end)
+
+    about:Slider('修改高度', 'Slider', 2, 2, 9999,false, function(Value)
+    game.Players.LocalPlayer.Character.Humanoid.HipHeight = Value
+end)
+
+    about:Slider('相机焦距上限', 'ZOOOOOM OUT!',  128, 128, 200000,false, function(Value)
+    game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = Value
+end)
+
+    about:Slider('相机焦距【正常为70】', 'Sliderflag', 70, 0.1, 250, false, function(v)
+        game.Workspace.CurrentCamera.FieldOfView = v
+end)
+
+    about:Slider('健康值上限', 'Sliderflag',  120, 120, 999999,false, function(Value)
+    game.Players.LocalPlayer.Character.Humanoid.MaxHealth = Value
+end)
+
+    about:Slider('玩家健康值', 'Sliderflag',  120, 120, 999999,false, function(Value)
+    game.Players.LocalPlayer.Character.Humanoid.Health = Value
+end)
+
+
+about:Toggle("无限跳","Toggle",false,function(Value)
+        Jump = Value
+        game.UserInputService.JumpRequest:Connect(function()
+            if Jump then
+                game.Players.LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+            end
+        end)
+    end)
+    
 local UITab3 = win:Tab("画质",'16060333448')
 
 local about = UITab3:section("画质",true)
@@ -1933,6 +1861,8 @@ about:Toggle("石头500万", "RK5M", false, function(RK5M)
     if game.Players.LocalPlayer.Durability.Value >= 5000000 then getgenv().RK5M = RK5M while getgenv().RK5M do wait() for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do if v:IsA("Tool") and v.Name == "Punch" then game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):EquipTool(v) end end for i,h in pairs(game.Players.LocalPlayer.Character:GetChildren()) do if h:IsA("Tool") and h.Name == "Punch" then h:Activate() end end game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-8957.54395, 5.53625107, -6126.90186, -0.803919137, 6.6065212e-08, 0.594738603, -8.93136143e-09, 1, -1.23155459e-07, -0.594738603, -1.04318865e-07, -0.803919137) end if not getgenv().RK5M then game.Players.LocalPlayer.Character:WaitForChild("Humanoid"):UnequipTools() end end
 end)
 
+local about = UITab3:section("传送",true)
+
 about:Button("传送到出生点",function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(7, 3, 108)
 end)
@@ -1963,6 +1893,136 @@ end)
 
 about:Button("传送到冰霜健身房",function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2543, 13, -410)
+end)
+
+local about = UITab2:section("『卧推』",false)
+
+about:Toggle("卧推沙滩","text",false,function(rack)
+    if game.Players.LocalPlayer.leaderstats.Strength.Value >= 150 then
+getgenv().spam = bench
+while getgenv().spam do
+wait()
+if game.Players.LocalPlayer.machineInUse.Value == nil then
+game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-241.827469, 7.91391563, 346.321808, 0.811665356, -1.43794319e-08, -0.584122717, -3.94010407e-08, 1, -7.93666999e-08, 0.584122717, 8.74342447e-08, 0.811665356)
+local vim = game:service("VirtualInputManager")
+           vim:SendKeyEvent(true, "E", false, game)
+else
+local A_1 = "rep"
+local A_2 = game:GetService("Workspace").machinesFolder["Bench Press"].interactSeat
+local Event = game:GetService("Players").LocalPlayer.muscleEvent
+Event:FireServer(A_1, A_2)
+end
+end
+end
+if not getgenv().spam then
+game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+end
+end)
+
+about:Toggle("卧推冰霜健身房","text",false,function(rack)
+    if game.Players.LocalPlayer.leaderstats.Strength.Value >= 7500 then
+getgenv().spam = bench
+while getgenv().spam do
+wait()
+if game.Players.LocalPlayer.machineInUse.Value == nil then
+game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-3020.7019, 32.5691414, -194.773117, 0.924556971, 2.05821564e-08, 0.381043822, -3.5507064e-08, 1, 3.21384199e-08, -0.381043822, -4.32435456e-08, 0.924556971)
+local vim = game:service("VirtualInputManager")
+           vim:SendKeyEvent(true, "E", false, game)
+else
+local A_1 = "rep"
+local A_2 = game:GetService("Workspace").machinesFolder["Bench Press"].interactSeat
+local Event = game:GetService("Players").LocalPlayer.muscleEvent
+Event:FireServer(A_1, A_2)
+end
+end
+end
+if not getgenv().spam then
+game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+end
+end)
+
+about:Toggle("卧推神话健身房","text",false,function(rack)
+    if game.Players.LocalPlayer.leaderstats.Strength.Value >= 15000 then
+getgenv().spam = bench
+while getgenv().spam do
+wait()
+if game.Players.LocalPlayer.machineInUse.Value == nil then
+game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(2363.95483, 42.2141037, 1243.50562, -0.944882751, 2.18911698e-08, 0.32740894, 4.06544087e-09, 1, -5.51292381e-08, -0.32740894, -5.07596027e-08, -0.944882751)
+local vim = game:service("VirtualInputManager")
+           vim:SendKeyEvent(true, "E", false, game)
+else
+local A_1 = "rep"
+local A_2 = game:GetService("Workspace").machinesFolder["Bench Press"].interactSeat
+local Event = game:GetService("Players").LocalPlayer.muscleEvent
+Event:FireServer(A_1, A_2)
+end
+end
+end
+if not getgenv().spam then
+game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+end
+end)
+
+about:Toggle("卧推永恒健身房","text",false,function(rack)
+    if game.Players.LocalPlayer.leaderstats.Strength.Value >= 15000 then
+getgenv().spam = bench
+while getgenv().spam do
+wait()
+if game.Players.LocalPlayer.machineInUse.Value == nil then
+game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-7172.77002, 48.3923645, -1105.06018, -0.972435296, -4.87620122e-09, 0.233172983, -2.76572942e-09, 1, 9.37805122e-09, -0.233172983, 8.47465476e-09, -0.972435296)
+local vim = game:service("VirtualInputManager")
+           vim:SendKeyEvent(true, "E", false, game)
+else
+local A_1 = "rep"
+local A_2 = game:GetService("Workspace").machinesFolder["Bench Press"].interactSeat
+local Event = game:GetService("Players").LocalPlayer.muscleEvent
+Event:FireServer(A_1, A_2)
+end
+end
+end
+if not getgenv().spam then
+game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+end
+end)
+
+about:Toggle("卧推传奇健身房","text",false,function(rack)
+    getgenv().spam = bench
+while getgenv().spam do
+wait()
+if game.Players.LocalPlayer.machineInUse.Value == nil then
+game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(4109.81152, 1024.02734, -3800.75122, 0.446250677, -7.44993258e-08, -0.894908011, -1.94296179e-09, 1, -8.4216893e-08, 0.894908011, 3.93206179e-08, 0.446250677)
+local vim = game:service("VirtualInputManager")
+           vim:SendKeyEvent(true, "E", false, game)
+else
+local A_1 = "rep"
+local A_2 = game:GetService("Workspace").machinesFolder["Bench Press"].interactSeat
+local Event = game:GetService("Players").LocalPlayer.muscleEvent
+Event:FireServer(A_1, A_2)
+end
+end
+if not getgenv().spam then
+game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+end
+end)
+
+about:Toggle("卧推肌肉之王健身房","text",false,function(rack)
+    getgenv().spam = bench
+while getgenv().spam do
+wait()
+if game.Players.LocalPlayer.machineInUse.Value == nil then
+game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-8592.99805, 49.1056519, -6042.80322, -0.975815654, -1.70261014e-08, 0.218595073, -1.06326148e-08, 1, 3.04244203e-08, -0.218595073, 2.73643881e-08, -0.975815654)
+local vim = game:service("VirtualInputManager")
+           vim:SendKeyEvent(true, "E", false, game)
+else
+local A_1 = "rep"
+local A_2 = game:GetService("Workspace").machinesFolder["Bench Press"].interactSeat
+local Event = game:GetService("Players").LocalPlayer.muscleEvent
+Event:FireServer(A_1, A_2)
+end
+end
+if not getgenv().spam then
+game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+end
 end)
 
 about:Button("力量传奇改力量",function()
@@ -2763,3 +2823,1372 @@ about:Button(
     end
 )
 
+local UITab28 = win:Tab("『兵工厂』",'16060333448')
+
+local SGV_Tab = UITab28:section("『武器』",false)
+
+SGV_Tab:Button("无限子弹",function()
+            while wait(0.5) do
+                game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount.Value = 100
+                game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount2.Value = 100
+            end
+        end)
+
+        SGV_Tab:Button("快速射击",function()
+            local replicationstorage = game.ReplicatedStorage
+                    
+            for i, v in pairs(replicationstorage.Weapons:GetDescendants()) do
+                if v.Name == "Auto" then
+                    v.Value = true
+                end
+                if v.Name == "RecoilControl" then
+                    v.Value = 0
+                end
+                if v.Name == "MaxSpread" then
+                    v.Value = 0
+                end
+                if v.Name == "ReloadTime" then
+                    v.Value = 0
+                end
+                if v.Name == "FireRate" then
+                    v.Value = 0.05
+                end
+                if v.Name == "Crit" then
+                    v.Value = 20
+                end
+            end       
+        end)
+
+local SGV_Tab = UITab28:section("『透视』",false)
+
+            SGV_Tab:Button("开启透视",function()
+                _G.FriendColor = Color3.fromRGB(0, 0, 255)
+                    _G.EnemyColor = Color3.fromRGB(255, 0, 0)
+                    _G.UseTeamColor = true
+                    
+                    --------------------------------------------------------------------
+                    local Holder = Instance.new("Folder", game.CoreGui)
+                    Holder.Name = "ESP"
+                    
+                    local Box = Instance.new("BoxHandleAdornment")
+                    Box.Name = "nilBox"
+                    Box.Size = Vector3.new(1, 2, 1)
+                    Box.Color3 = Color3.new(100 / 255, 100 / 255, 100 / 255)
+                    Box.Transparency = 0.7
+                    Box.ZIndex = 0
+                    Box.AlwaysOnTop = false
+                    Box.Visible = false
+                    
+                    local NameTag = Instance.new("BillboardGui")
+                    NameTag.Name = "nilNameTag"
+                    NameTag.Enabled = false
+                    NameTag.Size = UDim2.new(0, 200, 0, 50)
+                    NameTag.AlwaysOnTop = true
+                    NameTag.StudsOffset = Vector3.new(0, 1.8, 0)
+                    local Tag = Instance.new("TextLabel", NameTag)
+                    Tag.Name = "Tag"
+                    Tag.BackgroundTransparency = 1
+                    Tag.Position = UDim2.new(0, -50, 0, 0)
+                    Tag.Size = UDim2.new(0, 300, 0, 20)
+                    Tag.TextSize = 15
+                    Tag.TextColor3 = Color3.new(100 / 255, 100 / 255, 100 / 255)
+                    Tag.TextStrokeColor3 = Color3.new(0 / 255, 0 / 255, 0 / 255)
+                    Tag.TextStrokeTransparency = 0.4
+                    Tag.Text = "nil"
+                    Tag.Font = Enum.Font.SourceSansBold
+                    Tag.TextScaled = false
+                    
+                    local LoadCharacter = function(v)
+                        repeat wait() until v.Character ~= nil
+                        v.Character:WaitForChild("Humanoid")
+                        local vHolder = Holder:FindFirstChild(v.Name)
+                        vHolder:ClearAllChildren()
+                        local b = Box:Clone()
+                        b.Name = v.Name .. "Box"
+                        b.Adornee = v.Character
+                        b.Parent = vHolder
+                        local t = NameTag:Clone()
+                        t.Name = v.Name .. "NameTag"
+                        t.Enabled = true
+                        t.Parent = vHolder
+                        t.Adornee = v.Character:WaitForChild("Head", 5)
+                        if not t.Adornee then
+                            return UnloadCharacter(v)
+                        end
+                        t.Tag.Text = v.Name
+                        b.Color3 = Color3.new(v.TeamColor.r, v.TeamColor.g, v.TeamColor.b)
+                        t.Tag.TextColor3 = Color3.new(v.TeamColor.r, v.TeamColor.g, v.TeamColor.b)
+                        local Update
+                        local UpdateNameTag = function()
+                            if not pcall(function()
+                                    v.Character.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+                                    local maxh = math.floor(v.Character.Humanoid.MaxHealth)
+                                    local h = math.floor(v.Character.Humanoid.Health)
+                                end) then
+                                Update:Disconnect()
+                            end
+                        end
+                        UpdateNameTag()
+                        Update = v.Character.Humanoid.Changed:Connect(UpdateNameTag)
+                    end
+                    
+                    local UnloadCharacter = function(v)
+                        local vHolder = Holder:FindFirstChild(v.Name)
+                        if vHolder and (vHolder:FindFirstChild(v.Name .. "Box") ~= nil or vHolder:FindFirstChild(v.Name .. "NameTag") ~= nil) then
+                            vHolder:ClearAllChildren()
+                        end
+                    end
+                    
+                    local LoadPlayer = function(v)
+                        local vHolder = Instance.new("Folder", Holder)
+                        vHolder.Name = v.Name
+                        v.CharacterAdded:Connect(function()
+                            pcall(LoadCharacter, v)
+                        end)
+                        v.CharacterRemoving:Connect(function()
+                            pcall(UnloadCharacter, v)
+                        end)
+                        v.Changed:Connect(function(prop)
+                            if prop == "TeamColor" then
+                                UnloadCharacter(v)
+                                wait()
+                                LoadCharacter(v)
+                            end
+                        end)
+                        LoadCharacter(v)
+                    end
+                    
+                    local UnloadPlayer = function(v)
+                        UnloadCharacter(v)
+                        local vHolder = Holder:FindFirstChild(v.Name)
+                        if vHolder then
+                            vHolder:Destroy()
+                        end
+                    end
+                    
+                    for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+                        spawn(function() pcall(LoadPlayer, v) end)
+                    end
+                    
+                    game:GetService("Players").PlayerAdded:Connect(function(v)
+                        pcall(LoadPlayer, v)
+                    end)
+                    
+                    game:GetService("Players").PlayerRemoving:Connect(function(v)
+                        pcall(UnloadPlayer, v)
+                    end)
+                    
+                    game:GetService("Players").LocalPlayer.NameDisplayDistance = 0
+                    
+                    if _G.Reantheajfdfjdgs then
+                        return
+                    end
+                    
+                    _G.Reantheajfdfjdgs = ":suifayhgvsdghfsfkajewfrhk321rk213kjrgkhj432rj34f67df"
+                    
+                    local players = game:GetService("Players")
+                    local plr = players.LocalPlayer
+                    
+                    function esp(target, color)
+                        if target.Character then
+                            if not target.Character:FindFirstChild("GetReal") then
+                                local highlight = Instance.new("Highlight")
+                                highlight.RobloxLocked = true
+                                highlight.Name = "GetReal"
+                                highlight.Adornee = target.Character
+                                highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                                highlight.FillColor = color
+                                highlight.Parent = target.Character
+                            else
+                                target.Character.GetReal.FillColor = color
+                            end
+                        end
+                    end
+                    
+                    while task.wait() do
+                        for i, v in pairs(players:GetPlayers()) do
+                            if v ~= plr then
+                                esp(v, _G.UseTeamColor and v.TeamColor.Color or ((plr.TeamColor == v.TeamColor) and _G.FriendColor or _G.EnemyColor))
+                            end
+                        end
+                    end
+            end)
+
+local Player = UITab28:section("玩家调整功能",false)
+
+
+Player:Textbox("丝滑加速速度", "TPSpeed", "输入", function(value)
+getgenv().TPSpeed = value
+end)
+
+Player:Toggle('开启丝滑加速', "TPWalk", false, function(s)
+getgenv().TPWalk = s
+local hb = game:GetService("RunService").Heartbeat
+local player = game:GetService("Players")
+local lplr = player.LocalPlayer
+local chr = lplr.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+while getgenv().TPWalk and hb:Wait() and chr and hum and hum.Parent do
+  if hum.MoveDirection.Magnitude > 0 then
+    if getgenv().TPSpeed and isNumber(getgenv().TPSpeed) then
+      chr:TranslateBy(hum.MoveDirection * tonumber(getgenv().TPSpeed))
+    else
+      chr:TranslateBy(hum.MoveDirection)
+    end
+  end
+end
+end)
+
+Player:Toggle("穿墙", "LSTM", false, function(Value)
+    if Value then
+        Noclip = true
+        Stepped = game.RunService.Stepped:Connect(function()
+            if Noclip == true then
+                for a, b in pairs(game.Workspace:GetChildren()) do
+                    if b.Name == game.Players.LocalPlayer.Name then
+                        for i, v in pairs(game.Workspace[game.Players.LocalPlayer.Name]:GetChildren()) do
+                            if v:IsA("BasePart") then
+                                v.CanCollide = false
+                            end
+                        end
+                    end
+                end
+            else
+                Stepped:Disconnect()
+            end
+        end)
+    else
+        Noclip = false
+    end
+end)
+
+local Main = UITab28:section("主要",false)
+
+Main:Toggle("子弹追踪", "silent", false, function(silent)
+        if silent then
+        local CurrentCamera = workspace.CurrentCamera
+local Players = game.Players
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+function ClosestPlayer()
+    local MaxDist, Closest = math.huge
+    for I,V in pairs(Players.GetPlayers(Players)) do
+        if V == LocalPlayer then continue end
+        if V.Team == LocalPlayer then continue end
+        if not V.Character then continue end
+    local Head = V.Character.FindFirstChild(V.Character, "Head")
+        if not Head then continue end
+        local Pos, Vis = CurrentCamera.WorldToScreenPoint(CurrentCamera, Head.Position)
+        if not Vis then continue end
+        local MousePos, TheirPos = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 2, workspace.CurrentCamera.ViewportSize.Y / 2), Vector2.new(Pos.X, Pos.Y)
+        local Dist = (TheirPos - MousePos).Magnitude
+        if Dist < MaxDist then
+            MaxDist = Dist
+            Closest = V
+        end
+    end
+    return Closest
+end
+local MT = getrawmetatable(game)
+local OldNC = MT.__namecall
+local OldIDX = MT.__index
+setreadonly(MT, false)
+MT.__namecall = newcclosure(function(self, ...)
+    local Args, Method = {...}, getnamecallmethod()
+    if Method == "FindPartOnRayWithIgnoreList" and not checkcaller() then
+        local CP = ClosestPlayer()
+        if CP and CP.Character and CP.Character.FindFirstChild(CP.Character, "Head") then
+            Args[1] = Ray.new(CurrentCamera.CFrame.Position, (CP.Character.Head.Position - CurrentCamera.CFrame.Position).Unit * 1000)
+            return OldNC(self, unpack(Args))
+        end
+    end
+    return OldNC(self, ...)
+end)
+MT.__index = newcclosure(function(self, K)
+    if K == "Clips" then
+        return workspace.Map
+    end
+    return OldIDX(self, K)
+end)
+setreadonly(MT, true)
+    else
+        local CurrentCamera = workspace.CurrentCamera
+local Players = game.Players
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+function ClosestPlayer()
+    local MaxDist, Closest = math.huge
+    for I,V in pairs(Players.GetPlayers(Players)) do
+        if V == LocalPlayer then continue end
+        if V.Team == LocalPlayer then continue end
+        if not V.Character then continue end
+        local Head = V.Character.FindFirstChild(V.Character, "Head")
+        if not Head then continue end
+        local Pos, Vis = CurrentCamera.WorldToScreenPoint(CurrentCamera, Head.Position)
+        if not Vis then continue end
+        local MousePos, TheirPos = Vector2.new(workspace.CurrentCamera.ViewportSize.X / 0, workspace.CurrentCamera.ViewportSize.Y / 0), Vector2.new(Pos.X, Pos.Y)
+        local Dist = (TheirPos - MousePos).Magnitude
+        if Dist < MaxDist then
+            MaxDist = Dist
+            Closest = V
+        end
+    end
+    return Closest
+end
+local MT = getrawmetatable(game)
+local OldNC = MT.__namecall
+local OldIDX = MT.__index
+setreadonly(MT, false)
+MT.__namecall = newcclosure(function(self, ...)
+    local Args, Method = {...}, getnamecallmethod()
+    if Method == "FindPartOnRayWithIgnoreList" and not checkcaller() then
+        local CP = ClosestPlayer()
+        if CP and CP.Character and CP.Character.FindFirstChild(CP.Character, "Head") then
+            Args[1] = Ray.new(CurrentCamera.CFrame.Position, (CP.Character.Head.Position - CurrentCamera.CFrame.Position).Unit * 1000)
+            return OldNC(self, unpack(Args))
+        end
+    end
+    return OldNC(self, ...)
+end)
+MT.__index = newcclosure(function(self, K)
+    if K == "Clips" then
+        return workspace.Map
+    end
+    return OldIDX(self, K)
+end)
+setreadonly(MT, true)
+    end
+    end)
+
+Main:Button("无后坐力射击", function()
+	local replicationstorage = game.ReplicatedStorage
+    for i, v in pairs(replicationstorage.Weapons:GetDescendants()) do
+       if v.Name == "Auto" then
+           v.Value = true
+       end
+       if v.Name == "RecoilControl" then
+           v.Value = 0
+       end
+       if v.Name == "MaxSpread" then
+           v.Value = 0
+       end
+       if v.Name == "ReloadTime" then
+          v.Value = 0
+       end
+       if v.Name == "FireRate" then
+           v.Value = 0.05
+       end
+       if v.Name == "Crit" then
+           v.Value = 20
+       end
+   end
+end)
+
+Main:Button("ESP", function()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer then
+          local billboard = Instance.new("BillboardGui")
+          billboard.Parent = player.Character
+          billboard.Adornee = player.Character
+          billboard.Size = UDim2.new(0, 100, 0, 50)
+          billboard.StudsOffset = Vector3.new(0, 3, 0)
+          billboard.AlwaysOnTop = true
+
+          local nameLabel = Instance.new("TextLabel")
+          nameLabel.Parent = billboard
+          nameLabel.Size = UDim2.new(1, 0, 1, 0)
+          nameLabel.BackgroundTransparency = 1
+          nameLabel.Text = player.Name
+          nameLabel.TextColor3 = player.TeamColor
+          nameLabel.TextStrokeTransparency = 0.5
+          nameLabel.TextScaled = true
+        end
+    end
+end)
+
+local UITab29 = win:Tab("『杀手vs警长』",'16060333448')
+
+local SGV_Tab = UITab29:section("『透视和范围』",false)
+
+SGV_Tab:Button("透视",function(v)
+    while wait(1) do
+        local function ApplyESP(v)
+            if	v.Character and v.Character:FindFirstChildOfClass'Humanoid' then
+            v.Character.Humanoid.NameDisplayDistance = 9e9
+            v.Character.Humanoid.NameOcclusion = "NoOcclusion"
+            v.Character.Humanoid.HealthDisplayDistance = 9e9
+            v.Character.Humanoid.HealthDisplayType = "AlwaysOn"
+            v.Character.Humanoid.Health = v.Character.Humanoid.Health -- triggers changed
+            end
+        end
+        for i,v in pairs(game.Players:GetPlayers()) do
+        ApplyESP(v)
+            v.CharacterAdded:Connect(function()
+            task.wait(0.33)
+            ApplyESP(v)
+            end)
+        end
+        
+        game.Players.PlayerAdded:Connect(function(v)
+        ApplyESP(v)
+        v.CharacterAdded:Connect(function()
+            task.wait(0.33)
+            ApplyESP(v)
+        end)
+        end)
+    end
+end)
+
+SGV_Tab:Slider('范围', '拉条',  1, 1, 50,false, function(v)
+    _G.HeadSize = v
+	_G.Disabled = true
+		game:GetService('RunService').RenderStepped:connect(function()
+			if _G.Disabled then
+				for i,v in next, game:GetService('Players'):GetPlayers() do
+				if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+					pcall(function()
+					v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+					v.Character.HumanoidRootPart.Transparency = 0.9
+					v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really black")
+					v.Character.HumanoidRootPart.Material = "Neon"
+					v.Character.HumanoidRootPart.CanCollide = false
+				end)
+			end
+		end
+	end
+end) 
+end)
+
+local UITab30 = win:Tab("『一路向西』",'16060333448')
+
+local SGV_Tab = UITab30:section("人物模式",false)
+
+SGV_Tab:Toggle("无限跳跃","开关",false,function(v)
+    Jump = v
+    game.UserInputService.JumpRequest:Connect(function()
+        if Jump then
+            game.Players.LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+        end
+    end)
+end)
+
+SGV_Tab:Toggle("动物透视","开关",false,function(v)
+	getgenv().esp = v
+	esp()
+end)
+
+SGV_Tab:Button("开启透视",function()
+
+
+        _G.FriendColor = Color3.fromRGB(0, 0, 255)
+        _G.EnemyColor = Color3.fromRGB(255, 0, 0)
+        _G.UseTeamColor = true
+        
+        --------------------------------------------------------------------
+        local Holder = Instance.new("Folder", game.CoreGui)
+        Holder.Name = "ESP"
+        
+        local Box = Instance.new("BoxHandleAdornment")
+        Box.Name = "nilBox"
+        Box.Size = Vector3.new(1, 2, 1)
+        Box.Color3 = Color3.new(100 / 255, 100 / 255, 100 / 255)
+        Box.Transparency = 0.7
+        Box.ZIndex = 0
+        Box.AlwaysOnTop = false
+        Box.Visible = false
+        
+        local NameTag = Instance.new("BillboardGui")
+        NameTag.Name = "nilNameTag"
+        NameTag.Enabled = false
+        NameTag.Size = UDim2.new(0, 200, 0, 50)
+        NameTag.AlwaysOnTop = true
+        NameTag.StudsOffset = Vector3.new(0, 1.8, 0)
+        local Tag = Instance.new("TextLabel", NameTag)
+        Tag.Name = "Tag"
+        Tag.BackgroundTransparency = 1
+        Tag.Position = UDim2.new(0, -50, 0, 0)
+        Tag.Size = UDim2.new(0, 300, 0, 20)
+        Tag.TextSize = 15
+        Tag.TextColor3 = Color3.new(100 / 255, 100 / 255, 100 / 255)
+        Tag.TextStrokeColor3 = Color3.new(0 / 255, 0 / 255, 0 / 255)
+        Tag.TextStrokeTransparency = 0.4
+        Tag.Text = "nil"
+        Tag.Font = Enum.Font.SourceSansBold
+        Tag.TextScaled = false
+        
+        local LoadCharacter = function(v)
+            repeat wait() until v.Character ~= nil
+            v.Character:WaitForChild("Humanoid")
+            local vHolder = Holder:FindFirstChild(v.Name)
+            vHolder:ClearAllChildren()
+            local b = Box:Clone()
+            b.Name = v.Name .. "Box"
+            b.Adornee = v.Character
+            b.Parent = vHolder
+            local t = NameTag:Clone()
+            t.Name = v.Name .. "NameTag"
+            t.Enabled = true
+            t.Parent = vHolder
+            t.Adornee = v.Character:WaitForChild("Head", 5)
+            if not t.Adornee then
+                return UnloadCharacter(v)
+            end
+            t.Tag.Text = v.Name
+            b.Color3 = Color3.new(v.TeamColor.r, v.TeamColor.g, v.TeamColor.b)
+            t.Tag.TextColor3 = Color3.new(v.TeamColor.r, v.TeamColor.g, v.TeamColor.b)
+            local Update
+            local UpdateNameTag = function()
+                if not pcall(function()
+                        v.Character.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+                        local maxh = math.floor(v.Character.Humanoid.MaxHealth)
+                        local h = math.floor(v.Character.Humanoid.Health)
+                    end) then
+                    Update:Disconnect()
+                end
+            end
+            UpdateNameTag()
+            Update = v.Character.Humanoid.Changed:Connect(UpdateNameTag)
+        end
+        
+        local UnloadCharacter = function(v)
+            local vHolder = Holder:FindFirstChild(v.Name)
+            if vHolder and (vHolder:FindFirstChild(v.Name .. "Box") ~= nil or vHolder:FindFirstChild(v.Name .. "NameTag") ~= nil) then
+                vHolder:ClearAllChildren()
+            end
+        end
+        
+        local LoadPlayer = function(v)
+            local vHolder = Instance.new("Folder", Holder)
+            vHolder.Name = v.Name
+            v.CharacterAdded:Connect(function()
+                pcall(LoadCharacter, v)
+            end)
+            v.CharacterRemoving:Connect(function()
+                pcall(UnloadCharacter, v)
+            end)
+            v.Changed:Connect(function(prop)
+                if prop == "TeamColor" then
+                    UnloadCharacter(v)
+                    wait()
+                    LoadCharacter(v)
+                end
+            end)
+            LoadCharacter(v)
+        end
+        
+        local UnloadPlayer = function(v)
+            UnloadCharacter(v)
+            local vHolder = Holder:FindFirstChild(v.Name)
+            if vHolder then
+                vHolder:Destroy()
+            end
+        end
+        
+        for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+            spawn(function() pcall(LoadPlayer, v) end)
+        end
+        
+        game:GetService("Players").PlayerAdded:Connect(function(v)
+            pcall(LoadPlayer, v)
+        end)
+        
+        game:GetService("Players").PlayerRemoving:Connect(function(v)
+            pcall(UnloadPlayer, v)
+        end)
+        
+        game:GetService("Players").LocalPlayer.NameDisplayDistance = 0
+        
+        if _G.Reantheajfdfjdgs then
+            return
+        end
+        
+        _G.Reantheajfdfjdgs = ":suifayhgvsdghfsfkajewfrhk321rk213kjrgkhj432rj34f67df"
+        
+        local players = game:GetService("Players")
+        local plr = players.LocalPlayer
+        
+        function esp(target, color)
+            if target.Character then
+                if not target.Character:FindFirstChild("GetReal") then
+                    local highlight = Instance.new("Highlight")
+                    highlight.RobloxLocked = true
+                    highlight.Name = "GetReal"
+                    highlight.Adornee = target.Character
+                    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    highlight.FillColor = color
+                    highlight.Parent = target.Character
+                else
+                    target.Character.GetReal.FillColor = color
+                end
+            end
+        end
+        
+        while task.wait() do
+            for i, v in pairs(players:GetPlayers()) do
+                if v ~= plr then
+                    esp(v, _G.UseTeamColor and v.TeamColor.Color or ((plr.TeamColor == v.TeamColor) and _G.FriendColor or _G.EnemyColor))
+                end
+            end
+        end
+end)
+
+SGV_Tab:Button("无跌落伤害",function()
+    local gamemt = getrawmetatable(game)
+	local oldNc = gamemt.__namecall
+	setreadonly(gamemt, false)
+	
+	gamemt.__namecall = newcclosure(function(self, ...)
+	if (getnamecallmethod() == 'FireServer' and self.Name == 'ChangeCharacter') then
+		local args = {...}
+		if (args[1] and args[1] == 'Damage') then
+		return nil
+		end
+	end 
+	return oldNc(self, ...)
+	end)
+end)
+
+SGV_Tab:Button("快速拾取",function()
+    local v15 = require(game:GetService("Workspace")[game.Players.LocalPlayer.Name].ContextActions.ContextMain);
+	v15:New({
+	RobPlayerLength = 0.1, 
+	FixWallLength = 0.1, 
+	CrackSafeLength = 0.1, 
+	RobSafeLength = 0.1, 
+	RobRegisterLength = 0.1, 
+	PickCellLength = 0.1, 
+	SkinAnimalLength = 0.1
+	}, 200, 
+	{ "Get out of my shop! Outlaws are not welcome here!", "Hey, scoundrel! Get out before I call the sheriff!", "You're an outlaw! We don't serve your type here!" }, 
+	{ "This here's a bandit camp! Get out!", "Get lost, cowboy!", "Are you an outlaw? Didn't think so! Scram!" });
+end)
+
+SGV_Tab:Button("范围伤害",function()
+    loadstring(game:HttpGet(('https://pastebin.com/raw/rLGRxq0W')))()
+end)
+
+local SGV_Tab = UITab30:section("武器模式",false)
+
+SGV_Tab:Button("无后座力",function()
+	local mods = {
+		FanFire = true, 
+		camShakeResist = 0, 
+		prepTime = 0, 
+		equipTime = 0, 
+		Spread = 0, 
+		InstantFireAnimation = true
+	}
+
+	for _, gun in pairs(require(game:GetService("ReplicatedStorage").GunScripts.GunStats)) do
+		for prop, value in pairs(mods) do
+			if gun[prop] then
+				gun[prop] = value
+			end
+		end
+	end
+end)
+
+SGV_Tab:Button("一秒换弹",function()
+    local mods = {
+		FanFire = true, 
+		prepTime = 0, 
+		equipTime = 0, 
+		camShakeResist = 0, 
+		ReloadAnimationSpeed = 10, 
+		ReloadSpeed = 0, 
+		Spread = 0, 
+		InstantFireAnimation = true
+	}
+
+	for _, gun in pairs(require(game:GetService("ReplicatedStorage").GunScripts.GunStats)) do
+		for prop, value in pairs(mods) do
+			if gun[prop] then
+				gun[prop] = value
+			end
+		end
+	end
+end)
+
+SGV_Tab:Button("子弹汇聚",function()
+    local mods = {
+		FanFire = true, 
+		prepTime = 0, 
+		equipTime = 0, 
+		camShakeResist = 0, 
+		ReloadAnimationSpeed = 10, 
+		ReloadSpeed = 0, 
+		Spread = 0, 
+		HipFireAccuracy = 0, 
+		ZoomAccuracy = 0, 
+		InstantFireAnimation = true
+	}
+
+
+	for _, gun in pairs(require(game:GetService("ReplicatedStorage").GunScripts.GunStats)) do
+		for prop, value in pairs(mods) do
+			if gun[prop] then
+				gun[prop] = value
+			end
+		end
+	end
+end)
+
+SGV_Tab:Button("无限备弹 死亡后会卡无限子弹 需手动打几发子弹然后切换一下枪",function()
+    local mods = {
+		FanFire = true, 
+		prepTime = 0, 
+		equipTime = 0, 
+		MaxShots = math.huge, 
+		camShakeResist = 0, 
+		ReloadAnimationSpeed = 10, 
+		ReloadSpeed = 0, 
+		Spread = 0, 
+		InstantFireAnimation = true
+	}
+
+	for _, gun in pairs(require(game:GetService("ReplicatedStorage").GunScripts.GunStats)) do
+		for prop, value in pairs(mods) do
+			if gun[prop] then
+				gun[prop] = value
+			end
+		end
+	end
+end)
+
+local SGV_Tab = UITab30:section("传送模式",false)
+SGV_Tab:Label("牛仔传送点")
+
+SGV_Tab:Button("滚筒",function()
+	local args = {[1] = "StoneCreek",[2] = false}game:GetService("ReplicatedStorage"):WaitForChild("GeneralEvents"):WaitForChild("Spawn"):FireServer(unpack(args))
+end)
+
+SGV_Tab:Button("岩石溪",function()
+    local args = {[1] = "StoneCreek",[2] = false}game:GetService("ReplicatedStorage"):WaitForChild("GeneralEvents"):WaitForChild("Spawn"):FireServer(unpack(args))
+end)
+
+SGV_Tab:Button("灰色山脊",function()
+    local args = {[1] = "Grayridge",[2] = false}game:GetService("ReplicatedStorage"):WaitForChild("GeneralEvents"):WaitForChild("Spawn"):FireServer(unpack(args))
+end)
+
+SGV_Tab:Button("大矿洞",function()
+    local args = {[1] = "Quarry",[2] = false}game:GetService("ReplicatedStorage"):WaitForChild("GeneralEvents"):WaitForChild("Spawn"):FireServer(unpack(args))
+end)
+
+SGV_Tab:Label("不法之徒传送点")
+
+SGV_Tab:Button("堡垒",function()
+    local args = {[1] = "FortCassidy",[2] = true}game:GetService("ReplicatedStorage"):WaitForChild("GeneralEvents"):WaitForChild("Spawn"):FireServer(unpack(args))
+end)
+
+SGV_Tab:Button("阿瑟堡",function()
+    local args = {[1] = "FortArthur",[2] = true}game:GetService("ReplicatedStorage"):WaitForChild("GeneralEvents"):WaitForChild("Spawn"):FireServer(unpack(args))
+end)
+
+SGV_Tab:Button("红色岩石营地",function()
+    local args = {[1] = "RedRocks",[2] = true}game:GetService("ReplicatedStorage"):WaitForChild("GeneralEvents"):WaitForChild("Spawn"):FireServer(unpack(args))
+end)
+
+local SGV_Tab = UITab30:section("购买模式",false)
+
+SGV_Tab:Label("需要靠近NPC")
+
+SGV_Tab:Toggle("自动出售","开关",false,function(v)
+	getgenv().sell = v
+	sell()
+end)
+
+SGV_Tab:Toggle("手枪子弹","开关",false,function(v)
+	getgenv().buyammo1 = v
+	buyammo1()
+end)
+
+SGV_Tab:Toggle("步枪子弹","开关",false,function(v)
+	getgenv().buyammo2 = v
+	buyammo2()
+end)
+
+SGV_Tab:Toggle("购买箭矢","开关",false,function(v)
+	getgenv().buyammo3 = v
+	buyammo3()
+end)
+
+SGV_Tab:Toggle("霰弹子弹","开关",false,function(v)
+	getgenv().buyammo4 = v
+	buyammo4()
+end)
+
+SGV_Tab:Toggle("狙击子弹","开关",false,function(v)
+	getgenv().buyammo5 = v
+	buyammo5()
+end)
+
+SGV_Tab:Toggle("小型炸药","开关",false,function(v)
+	getgenv().buyammo6 = v
+	buyammo6()
+end)
+
+SGV_Tab:Toggle("大型炸药","开关",false,function(v)
+	getgenv().buyammo7 = v
+	buyammo7()
+end)
+
+local SGV_Tab = UITab30:section("白天模式",false)
+
+SGV_Tab:Toggle("白天","开关",false,function()
+    if not _G.FullBrightExecuted then
+
+        _G.FullBrightEnabled = false
+    
+        _G.NormalLightingSettings = {
+            Brightness = game:GetService("Lighting").Brightness,
+            ClockTime = game:GetService("Lighting").ClockTime,
+            FogEnd = game:GetService("Lighting").FogEnd,
+            GlobalShadows = game:GetService("Lighting").GlobalShadows,
+            Ambient = game:GetService("Lighting").Ambient
+        }
+    
+        game:GetService("Lighting"):GetPropertyChangedSignal("Brightness"):Connect(function()
+            if game:GetService("Lighting").Brightness ~= 1 and game:GetService("Lighting").Brightness ~= _G.NormalLightingSettings.Brightness then
+                _G.NormalLightingSettings.Brightness = game:GetService("Lighting").Brightness
+                if not _G.FullBrightEnabled then
+                    repeat
+                        wait()
+                    until _G.FullBrightEnabled
+                end
+                game:GetService("Lighting").Brightness = 1
+            end
+        end)
+    
+        game:GetService("Lighting"):GetPropertyChangedSignal("ClockTime"):Connect(function()
+            if game:GetService("Lighting").ClockTime ~= 12 and game:GetService("Lighting").ClockTime ~= _G.NormalLightingSettings.ClockTime then
+                _G.NormalLightingSettings.ClockTime = game:GetService("Lighting").ClockTime
+                if not _G.FullBrightEnabled then
+                    repeat
+                        wait()
+                    until _G.FullBrightEnabled
+                end
+                game:GetService("Lighting").ClockTime = 12
+            end
+        end)
+    
+        game:GetService("Lighting"):GetPropertyChangedSignal("FogEnd"):Connect(function()
+            if game:GetService("Lighting").FogEnd ~= 786543 and game:GetService("Lighting").FogEnd ~= _G.NormalLightingSettings.FogEnd then
+                _G.NormalLightingSettings.FogEnd = game:GetService("Lighting").FogEnd
+                if not _G.FullBrightEnabled then
+                    repeat
+                        wait()
+                    until _G.FullBrightEnabled
+                end
+                game:GetService("Lighting").FogEnd = 786543
+            end
+        end)
+    
+        game:GetService("Lighting"):GetPropertyChangedSignal("GlobalShadows"):Connect(function()
+            if game:GetService("Lighting").GlobalShadows ~= false and game:GetService("Lighting").GlobalShadows ~= _G.NormalLightingSettings.GlobalShadows then
+                _G.NormalLightingSettings.GlobalShadows = game:GetService("Lighting").GlobalShadows
+                if not _G.FullBrightEnabled then
+                    repeat
+                        wait()
+                    until _G.FullBrightEnabled
+                end
+                game:GetService("Lighting").GlobalShadows = false
+            end
+        end)
+    
+        game:GetService("Lighting"):GetPropertyChangedSignal("Ambient"):Connect(function()
+            if game:GetService("Lighting").Ambient ~= Color3.fromRGB(178, 178, 178) and game:GetService("Lighting").Ambient ~= _G.NormalLightingSettings.Ambient then
+                _G.NormalLightingSettings.Ambient = game:GetService("Lighting").Ambient
+                if not _G.FullBrightEnabled then
+                    repeat
+                        wait()
+                    until _G.FullBrightEnabled
+                end
+                game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+            end
+        end)
+    
+        game:GetService("Lighting").Brightness = 1
+        game:GetService("Lighting").ClockTime = 12
+        game:GetService("Lighting").FogEnd = 786543
+        game:GetService("Lighting").GlobalShadows = false
+        game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+    
+        local LatestValue = true
+        spawn(function()
+            repeat
+                wait()
+            until _G.FullBrightEnabled
+            while wait() do
+                if _G.FullBrightEnabled ~= LatestValue then
+                    if not _G.FullBrightEnabled then
+                        game:GetService("Lighting").Brightness = _G.NormalLightingSettings.Brightness
+                        game:GetService("Lighting").ClockTime = _G.NormalLightingSettings.ClockTime
+                        game:GetService("Lighting").FogEnd = _G.NormalLightingSettings.FogEnd
+                        game:GetService("Lighting").GlobalShadows = _G.NormalLightingSettings.GlobalShadows
+                        game:GetService("Lighting").Ambient = _G.NormalLightingSettings.Ambient
+                    else
+                        game:GetService("Lighting").Brightness = 1
+                        game:GetService("Lighting").ClockTime = 12
+                        game:GetService("Lighting").FogEnd = 786543
+                        game:GetService("Lighting").GlobalShadows = false
+                        game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+                    end
+                    LatestValue = not LatestValue
+                end
+            end
+        end)
+    end
+    
+    _G.FullBrightExecuted = true
+    _G.FullBrightEnabled = not _G.FullBrightEnabled
+end)
+
+local SGV_Tab = UITab30:section("全图击杀",false)
+
+SGV_Tab:Button("手持近战",function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/CX5200/Sword-Guest/main/killQWQ'))()
+end)
+
+local UITab75 = win:Tab("Papers Pls",'7734068321')
+
+local about = UITab75:section("『Papers Pls』",true)
+
+about:Button("Papers Pls无限金钱",function()
+local Players = game:GetService("Players")
+local workspace = game:GetService("Workspace")
+local vehicleShop = game:GetService("Workspace").Buildings.VehicleShop
+local humanoidRootPart = Players.LocalPlayer.Character.HumanoidRootPart
+
+
+humanoidRootPart.CFrame = vehicleShop.MeshPart.CFrame
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.1)
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.1)
+humanoidRootPart.CFrame = vehicleShop.MeshPart.CFrame
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.1)
+humanoidRootPart.CFrame = vehicleShop.MeshPart.CFrame
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.1)
+
+--poorly coded but what ever took me 2 mins inf money!! SOURCE
+humanoidRootPart.CFrame = CFrame.new(325.4398498535156, 2.3936524391174316, 84.23402404785156)
+fireproximityprompt(vehicleShop.MeshPart.ProximityPrompt)
+task.wait(0.5)
+
+
+
+while true do
+for _,v in ipairs(vehicleShop:GetChildren()) do
+    if v.Name 
+    == "CarMake" or v.Name == "Carmake2" then
+        for _, sigh in ipairs(v:GetDescendants()) do
+            if sigh:IsA("ProximityPrompt") then
+                    fireproximityprompt(sigh)
+                    sigh.RequiresLineOfSight = false
+            end
+        end
+    end
+end
+task.wait()
+end
+end)
+
+local UITab39 = win:Tab("『巴掌模拟器』",'7734068321')
+
+local about = UITab39:section("『巴掌模拟器』",true)
+
+about:Toggle("无CD","Toggle" ,false, function(Value)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local tool = character:FindFirstChildOfClass("Tool") or player.Backpack:FindFirstChildOfClass("Tool")
+    
+    bazhangmnq = Value
+    
+    while bazhangmnq do
+    local localscript = tool:FindFirstChildOfClass("LocalScript")
+    local localscriptclone = localscript:Clone()
+    localscriptclone = localscript:Clone()
+    localscriptclone:Clone()
+    localscript:Destroy()
+    localscriptclone.Parent = tool
+    wait(0.1)
+    end
+    end)
+    
+    about:Button("获取计数器手套", function()
+    fireclickdetector(game.Workspace.CounterLever.ClickDetector)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0,100,0)
+    wait(0.2)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+    wait(121)
+    for i,v in pairs(workspace.Maze:GetDescendants()) do
+    if v:IsA("ClickDetector") then
+    fireclickdetector(v)
+    end
+    end
+    end)
+    
+    about:Toggle("地牢亮度","Toggle" ,false, function(Value)
+     Light = Value
+        if not Light then
+            game.Lighting.Ambient = Color3.new(0, 0, 0)
+        end
+    end)
+    
+    about:Dropdown("传送","Dropdown",{"安全区","竞技场","埃及岛","果实岛","盘子","锦标赛","默认竞技场"},function(Value)
+    if Value == "安全区" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Spot.CFrame * CFrame.new(0,40,0)
+    elseif Value == "竞技场" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.workspace.Origo.CFrame * CFrame.new(0,-5,0)
+    elseif Value == "埃及岛" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(215, -15.5, 0.5)
+    elseif Value == "果实岛" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.workspace.Arena.island5.Union.CFrame * CFrame.new(0,3.25,0)
+    elseif Value == "盘子" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Arena.Plate.CFrame * CFrame.new(0,2,0)
+    elseif Value == "锦标赛" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Battlearena.Arena.CFrame * CFrame.new(0,10,0)
+    elseif Value == "默认竞技场" then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(120,360,-3)
+    end
+    end)
+    
+    about:Toggle("复古技能","Toggle" ,false, function(Value)
+    RetroSpam = Value
+    while RetroSpam do
+    game:GetService("ReplicatedStorage").RetroAbility:FireServer(RetroAbility)
+    task.wait()
+    end
+    end)
+    
+    about:Dropdown("复古技能选择","Dropdown",{"Rocket Launcher","Ban Hammer","Bomb"}, function(Value)
+    RetroAbility = Value
+    end)
+    
+    about:Toggle("自动捡糖果","Toggle",false, function(Value)
+    CandyCornFarm = Value
+    while CandyCornFarm do
+    for i, v in pairs(workspace.CandyCorns:GetChildren()) do
+                    if v:FindFirstChildWhichIsA("TouchTransmitter") then
+    v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                    end
+                end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("获取炼金术师材料","Toggle", false, function(Value)
+    AlchemistIngredients = Value
+    if game.Players.LocalPlayer.leaderstats.Glove.Value == "Alchemist" then
+    while AlchemistIngredients do
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Mushroom")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Glowing Mushroom")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Fire Flower")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Winter Rose")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Dark Root")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Dire Flower")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Autumn Sprout")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Elder Wood")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Hazel Lily")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Wild Vine")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Jade Stone")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Lamp Grass")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Plane Flower")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Blood Rose")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Red Crystal")
+    game.ReplicatedStorage.AlchemistEvent:FireServer("AddItem","Blue Crystal")
+    task.wait()
+    end
+    end
+    end)
+    
+    about:Toggle("自动加入竞技场","Toggle", false, function(Value)
+    AutoEnterArena = Value
+    while AutoEnterArena do
+    if game.Players.LocalPlayer.Character:FindFirstChild("entered") == nil and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), workspace.Lobby.Teleport1, 0)
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), workspace.Lobby.Teleport1, 1)
+        end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动光波球","Toggle", false, function(Value)
+    if Person == nil then
+    Person = game.Players.LocalPlayer.Name
+    end
+    _G.RojoSpam = Value
+    while _G.RojoSpam do
+    game:GetService("ReplicatedStorage"):WaitForChild("RojoAbility"):FireServer("Release", {game.Players[Person].Character.HumanoidRootPart.CFrame})
+    task.wait()
+    end
+    end)
+    
+    about:Button("Rojo技能", function(Value)
+    _G.RojoSpam = Value
+    game:GetService("ReplicatedStorage"):WaitForChild("RojoAbility"):FireServer("Charge")
+    wait(6)
+    game:GetService("ReplicatedStorage"):WaitForChild("RojoAbility"):FireServer("Release", {game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame})
+    task.wait()
+    end)
+    
+    about:Toggle("音符技能","Toggle", false, function(Value)
+    _G.RhythmSpam = Value
+    while _G.RhythmSpam do
+    game:GetService("ReplicatedStorage").rhythmevent:FireServer("AoeExplosion",0)
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("Null技能","Toggle", false, function(Value)
+    NullSpam = Value
+    while NullSpam do
+    game:GetService("ReplicatedStorage").NullAbility:FireServer()
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动拾取黄金果实","Toggle", false, function(Value)
+    SlappleFarm = Value
+    while SlappleFarm do
+    for i, v in ipairs(workspace.Arena.island5.Slapples:GetDescendants()) do
+                    if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("entered") and v.Name == "Glove" and v:FindFirstChildWhichIsA("TouchTransmitter") then
+                        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+                    end
+                end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动捡飞行宝珠","Toggle", false, function(Value)
+    Jetfarm = Value
+    while Jetfarm do
+    for i,v in pairs(game.Workspace:GetChildren()) do
+                        if v.Name == "JetOrb" and v:FindFirstChild("TouchInterest") then
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 0)
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 1)
+                        end
+                    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动捡相位球","Toggle", false, function(Value)
+    Phasefarm = Value
+    while Phasefarm do
+    for i,v in pairs(game.Workspace:GetChildren()) do
+                        if v.Name == "PhaseOrb" and v:FindFirstChild("TouchInterest") then
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 0)
+    firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 1)
+                        end
+                    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("自动刷bob","Toggle", false, function(Value)
+    ReplicaFarm = Value
+    while ReplicaFarm do
+    for i, v in pairs(workspace:GetChildren()) do
+                    if v.Name:match(game.Players.LocalPlayer.Name) and v:FindFirstChild("HumanoidRootPart") then
+    game.ReplicatedStorage.b:FireServer(v:WaitForChild("HumanoidRootPart"))
+                    end
+                end
+    task.wait()
+    game:GetService("ReplicatedStorage").Duplicate:FireServer()
+    task.wait(7)
+    end
+    end)
+    
+    about:Toggle("无限反转","Toggle", false, function(Value)
+    _G.InfReverse = Value
+    while _G.InfReverse do
+    game:GetService("ReplicatedStorage").ReverseAbility:FireServer()
+    wait(6)
+    end
+    end)
+    
+    about:Toggle("彩虹角色(装备黄金手套)","Toggle", false, function(Value)
+    _G.Rainbow = Value
+    while _G.Rainbow do
+    for i = 0,1,0.001*25 do
+    game:GetService("ReplicatedStorage").Goldify:FireServer(false, BrickColor.new(Color3.fromHSV(i,1,1)))
+    task.wait()
+    end
+    end
+    end)
+    
+    about:Toggle("防击飞","Toggle", false, function(Value)
+    AntiRagdoll = Value
+    if AntiRagdoll then
+    game.Players.LocalPlayer.Character.Humanoid.Health = 0
+    game.Players.LocalPlayer.CharacterAdded:Connect(function()
+    game.Players.LocalPlayer.Character:WaitForChild("Ragdolled").Changed:Connect(function()
+    if game.Players.LocalPlayer.Character:WaitForChild("Ragdolled").Value == true and AntiRagdoll then
+    repeat task.wait() game.Players.LocalPlayer.Character.Torso.Anchored = true
+    until game.Players.LocalPlayer.Character:WaitForChild("Ragdolled").Value == false
+    game.Players.LocalPlayer.Character.Torso.Anchored = false
+    end
+    end)
+    end)
+    end
+    end)
+    
+    about:Toggle("反虚空(锦标赛也有效果)","Toggle", false, function(Value)
+    game.Workspace.dedBarrier.CanCollide = Value
+    game.Workspace.TAntiVoid.CanCollide = Value
+    end)
+
+about:Toggle("防死亡屏障","Toggle", false, function(Value)
+    if Value == true then
+    for i,v in pairs(game.Workspace.DEATHBARRIER:GetChildren()) do
+                        if v.ClassName == "Part" and v.Name == "BLOCK" then
+                            v.CanTouch = false
+                        end
+                    end
+    workspace.DEATHBARRIER.CanTouch = false
+    workspace.DEATHBARRIER2.CanTouch = false
+    workspace.dedBarrier.CanTouch = false
+    workspace.ArenaBarrier.CanTouch = false
+    workspace.AntiDefaultArena.CanTouch = false
+    else
+    for i,v in pairs(game.Workspace.DEATHBARRIER:GetChildren()) do
+                        if v.ClassName == "Part" and v.Name == "BLOCK" then
+                            v.CanTouch = true
+                        end
+                    end
+    workspace.DEATHBARRIER.CanTouch = true
+    workspace.DEATHBARRIER2.CanTouch = true
+    workspace.dedBarrier.CanTouch = true
+    workspace.ArenaBarrier.CanTouch = true
+    workspace.AntiDefaultArena.CanTouch = true
+    end
+    end)
+    
+    about:Toggle("防巴西", "ToggleInfo", false, function(value)
+    if Value == true then
+    for i,v in pairs(game.Workspace.Lobby.brazil:GetChildren()) do
+                            v.CanTouch = false
+                    end
+    else
+    for i,v in pairs(game.Workspace.Lobby.brazil:GetChildren()) do
+                            v.CanTouch = true
+                    end
+    end
+    end)
+    
+    about:Toggle("反死亡方块","Toggle", false, function(Value)
+    if Value == true then
+            workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = false
+            else
+                    workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = true
+            end
+    end)
+    
+    about:Toggle("反上帝技能","Toggle", false, function(Value)
+    AntiTimestop = Value
+    while AntiTimestop do
+                    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                        if v.ClassName == "Part" then
+                            v.Anchored = false
+                        end
+                    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("反鱿鱼","Toggle", false, function(Value)
+    AntiSquid = Value
+    if AntiSquid == false then
+            game.Players.LocalPlayer.PlayerGui.SquidInk.Enabled = true
+            end
+    while AntiSquid do
+    if game.Players.LocalPlayer.PlayerGui:FindFirstChild("SquidInk") then
+            game.Players.LocalPlayer.PlayerGui.SquidInk.Enabled = false
+    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("反神圣杰克","Toggle", false, function(Value)
+    game.Players.LocalPlayer.PlayerScripts.HallowJackAbilities.Disabled = Value
+    end)
+    
+    about:Toggle("反传送带","Toggle", false, function(Value)
+    game.Players.LocalPlayer.PlayerScripts.ConveyorVictimized.Disabled = Value
+    end)
+    
+    about:Toggle("反板砖","Toggle", false, function(Value)
+    AntiBrick = Value
+    while AntiBrick do
+    for i,v in pairs(game.Workspace:GetChildren()) do
+                        if v.Name == "Union" then
+                            v.CanTouch = false
+                        end
+                    end
+    task.wait()
+    end
+    end)
+    
+    about:Toggle("反Null","Toggle", false, function(Value)
+    AntiNull = Value
+    while AntiNull do
+    for i,v in pairs(game.Workspace:GetChildren()) do
+                        if v.Name == "Imp" and v:FindFirstChild("Body") then
+    shared.gloveHits[game.Players.LocalPlayer.leaderstats.Glove.Value]:FireServer(v.Body,true)
+    end
+    end
+    task.wait()
+    end
+    end)
+    
+local UITab3 = win:Tab("巴掌",'16060333448')
+
+local about = UITab3:section("巴掌",true)
+    
+about:Button("自动刷巴掌",function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/ionlyusegithubformcmods/1-Line-Scripts/main/Slap%20Farm'))()
+end)
+
+about:Button("巴掌模拟器1",function()
+loadstring(game:HttpGet("https://lkhub.net/s/loader.lua"))()
+end)
+
+about:Button("巴掌模拟器2",function()
+loadstring(game:HttpGet(("https://raw.githubusercontent.com/ionlyusegithubformcmods/1-Line-Scripts/main/Slap%20Battles")))()
+end)
+
+about:Button("巴掌模拟器3",function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dizyhvh/slap_battles_gui/main/0.lua"))()
+end)
+
+local UITab11 = win:Tab("『感染性微笑』",'7734068321')
+
+local about = UITab11:section("『感染性微笑』",true)
+
+about:Button("感染性微笑1",function()
+loadstring(game:HttpGet("https://pastebin.com/raw/WG1BMS72",true))()
+end)
+
+about:Button("感染性微笑2",function()
+loadstring(game:HttpGet(("https://pastebin.com/raw/mT10xnt7"), true))()
+end)
+
+local UITab23 = win:Tab("『餐厅大亨』",'7734068321')
+
+local about = UITab23:section("『餐厅大亨』",true)
+
+about:Button("餐厅大亨1",function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/toosiwhip/snake-hub/main/restaurant-tycoon-2.lua"))()
+end)
+
+about:Button("餐厅大亨2",function()
+loadstring(game:HttpGet("https://pastefy.app/Ppqt0Gib/raw"))()
+end)
+
+about:Button("无限金钱",function()
+loadstring(game:HttpGet("https://shz.al/~zkzkzisKAKAKK"))()
+end)
